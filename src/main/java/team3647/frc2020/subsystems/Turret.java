@@ -71,13 +71,6 @@ public class Turret extends TalonSRXSubsystem {
         // } else {
         //     end();
         // }
-
-        
-        if (angle >= kMaxRotationDeg) {
-            angle = kMinRotationDeg + 5;
-        } else if (angle <= kMinRotationDeg) {
-            angle = kMaxRotationDeg - 5;
-        }
         setPosition(MathUtil.clamp(angle, kMinRotationDeg, kMaxRotationDeg));
         updatePositionFeedforward();
     }
@@ -101,16 +94,11 @@ public class Turret extends TalonSRXSubsystem {
     // }
 
     public void setAngleMotionMagic(double angle) {
-        setPositionMotionMagic(angle);
-        // if (isAngleGood(angle)) {
-        //     setPositionMotionMagic(angle);
-        // } else {
-        //     end();
-        // }
-    }
-
-    public void setTest() {
-        setAngle(-15);
+        if (isAngleGood(angle)) {
+            setPositionMotionMagic(angle);
+        } else {
+            end();
+        }
     }
 
     public boolean isOnLimitSwitch() {

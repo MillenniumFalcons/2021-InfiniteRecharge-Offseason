@@ -27,15 +27,12 @@ public class GroundIntake extends CommandBase {
     public void execute() {
         m_intake.extendOuter();
         m_intake.extendInner();
-        m_intake.intake(.8);
+        m_intake.intake(.7);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_intake.retractInner();
-        m_intake.retractOuter();
-        m_intake.extendInner();
         m_intake.intake(0);
     }
 

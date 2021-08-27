@@ -121,6 +121,7 @@ public class RobotContainer {
                 airCompressor.start();
                 pdp.clearStickyFaults();
 
+                //MUST START IN STOWED FOR INTAKE TRANSITIONS TO WORK PROPERLY      
                 m_intake.retractInner();
                 m_intake.retractOuter();
 
@@ -132,6 +133,7 @@ public class RobotContainer {
                                 new ArcadeDrive(m_drivetrain, mainController::getLeftStickY,
                                                 mainController::getRightStickX, mainController.rightJoyStickPress::get,
                                                 mainController.buttonA::get));
+                                                
                 m_commandScheduler.setDefaultCommand(m_turret, new TurretManual(m_turret, coController::getLeftStickX));
                 m_indexer.setDefaultCommand(new IndexerManual(m_indexer, coController::getRightStickY));
 
@@ -219,27 +221,25 @@ public class RobotContainer {
                 coController.leftBumper.and(coController.leftTrigger.negate())
                                 .whenActive(new SequentialCommandGroup(
                                                 new RunCommand(m_intake::end, m_intake).withTimeout(0.2),
-                                                new ExtendIntakeToGround(m_intake).withTimeout(0.2),
+                                                new ExtendIntakeToGround(m_intake).withTimeout(0.4),
                                                 new RunCommand(m_intake::retractOuter, m_intake).withTimeout(0.2)));
 
                 coController.leftBumper.and(coController.leftTrigger).whenActive(new ParallelCommandGroup(
                                 new GroundIntake(m_intake), new LoadBalls(m_indexer, m_ballStopper)));
 
-                coController.leftBumper.whenReleased(new RunCommand(m_intake::end));
+                coController.leftBumper.whenReleased(new ParallelCommandGroup(new RunCommand(m_intake::end, m_intake), new RunCommand(m_indexer::end, m_indexer)));
 
                 // coController.leftBumper
                 // .whenReleased(new ParallelCommandGroup(new RunCommand(m_intake::end,
                 // m_intake),
                 // new OrganizeFeeder(m_indexer, m_kickerWheel).withTimeout(3)));
 
-                coController.buttonA.whenActive(new RemoveBalls(m_indexer, m_intake, m_kickerWheel));
-                coController.buttonA.whenReleased(new RunCommand(() -> {
-                        m_intake.end();
+                coController.buttonA.whenActive(new SequentialCommandGroup(new RemoveBalls(m_indexer, m_intake, m_kickerWheel)));
+                coController.buttonA.whenReleased(new SequentialCommandGroup(new RunCommand(() -> {
                         m_indexer.end();
                         m_kickerWheel.end();
-                        m_intake.retractOuter();
-                        m_intake.extendInner();
-                }, m_indexer, m_intake, m_kickerWheel).withTimeout(.5));
+                        m_intake.end();
+                }, m_indexer, m_kickerWheel, m_intake).withTimeout(.5)));
 
                 // climber deploy and get turret out of way
                 mainController.buttonX.whenActive(new SequentialCommandGroup(
@@ -250,25 +250,22 @@ public class RobotContainer {
                 coController.buttonX.whenActive(new ParallelCommandGroup(new FlywheelOpenloop(m_flywheel, -1),
                                 new KickerWheelOpenloop(m_kickerWheel, -1)));
 
-                // coController.rightBumper.whenActive(new ParallelCommandGroup(
-                // new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
-                // m_visionController::getFilteredYaw, m_visionController::isValid),
-                // new AccelerateFlywheelKickerWheel(m_flywheel, m_kickerWheel,
-                // this::getFlywheelRPM,
-                // m_visionController::isValid)));
+                coController.rightBumper.whenActive(new ParallelCommandGroup(
+                new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
+                m_visionController::getFilteredYaw, m_visionController::isValid),
+                new AccelerateFlywheelKickerWheel(m_flywheel, m_kickerWheel,
+                this::getFlywheelRPM,
+                m_visionController::isValid)));
 
-                coController.rightBumper.whenActive(new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
-                                m_visionController::getFilteredYaw, m_visionController::isValid));
 
                 coController.leftMidButton.whenActive(new InstantCommand(() -> {
                         m_visionController.setPipeline(Pipeline.SUNNY_TARGETING);
                 }));
 
-                // coController.rightMidButton.whenActive(new InstantCommand(() -> {
-                // m_visionController.setPipeline(Pipeline.CLOSE);
-                // }));
+                coController.rightMidButton.whenActive(new InstantCommand(() -> {
+                m_visionController.setPipeline(Pipeline.CLOSE);
+                }));
 
-                coController.rightMidButton.whenActive(new RunCommand(m_turret::setTest, m_turret));
 
                 coController.rightTrigger.whenActive(new ParallelCommandGroup(
                                 new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,

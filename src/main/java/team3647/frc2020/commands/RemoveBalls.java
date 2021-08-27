@@ -50,7 +50,6 @@ public class RemoveBalls extends CommandBase {
     m_intake.end();
     m_indexer.end();
     m_kickerWheel.end();
-    m_intake.extendInner();
     m_intake.retractOuter();
   }
 

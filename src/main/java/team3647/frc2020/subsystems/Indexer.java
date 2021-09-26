@@ -101,17 +101,17 @@ public class Indexer implements PeriodicSubsystem {
             HALMethods.sendDSError("Indexer signal was null!");
             return;
         }
-        // if (getCurrent.apply(leftVerticalPDPSlot) > 30) {
-        //     leftVertical.set(ControlMode.PercentOutput, signal.getLeftVerticalOutput() * .5);
-        // } else {
-        //     leftVertical.set(ControlMode.PercentOutput, signal.getLeftVerticalOutput());
-        // }
+        if (getCurrent.apply(leftVerticalPDPSlot) > 30) {
+            leftVertical.set(ControlMode.PercentOutput, signal.getLeftVerticalOutput() * .5);
+        } else {
+            leftVertical.set(ControlMode.PercentOutput, signal.getLeftVerticalOutput());
+        }
 
-        // if (Math.abs(rightVertical.getSupplyCurrent()) > 30) {
-        //     rightVertical.set(ControlMode.PercentOutput, signal.getRightVerticalOutput() * .5);
-        // } else {
-        //     rightVertical.set(ControlMode.PercentOutput, signal.getRightVerticalOutput());
-        // }
+        if (Math.abs(rightVertical.getSupplyCurrent()) > 30) {
+            rightVertical.set(ControlMode.PercentOutput, signal.getRightVerticalOutput() * .5);
+        } else {
+            rightVertical.set(ControlMode.PercentOutput, signal.getRightVerticalOutput());
+        }
 
         if (getCurrent.apply(tunnelPDPSlot) > 30) {
             tunnel.set(ControlMode.PercentOutput, signal.getTunnelOutput() * .5);

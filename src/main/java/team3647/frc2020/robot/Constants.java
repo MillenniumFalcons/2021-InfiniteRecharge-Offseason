@@ -53,7 +53,7 @@ public class Constants {
         public static final DifferentialDriveKinematics kDriveKinematics =
                 new DifferentialDriveKinematics(kTrackwidthMeters);
 
-        public static final double kMaxSpeedMetersPerSecond = 1;
+        public static final double kMaxSpeedMetersPerSecond = 2;
         public static final double kMaxAccelerationMetersPerSecondSquared = 2;
 
         public static final double maxVoltage = 11.0;
@@ -367,31 +367,64 @@ public class Constants {
     }
 
     public static class cField {
-        public static final Pose2d GalaticSearch_A_Red_startingPoint = new Pose2d(new Translation2d(Units.inches_to_meters(30), Units.inches_to_meters(150)), new Rotation2d(Units.degrees_to_radians(180)));
-        public static final Translation2d GalaticSearch_A_Red_firstBall = new Translation2d(Units.inches_to_meters(90), Units.inches_to_meters(90));
-        public static final Translation2d GalaticSearch_A_Red_secondBall = new Translation2d(Units.inches_to_meters(153), Units.inches_to_meters(60));
-        public static final Translation2d GalaticSearch_A_Red_thirdBall = new Translation2d(Units.inches_to_meters(180), Units.inches_to_meters(140));
-        public static final Pose2d GalaticSearch_A_Red_endingPoint = new Pose2d(new Translation2d(Units.inches_to_meters(330), Units.inches_to_meters(150)), new Rotation2d(Units.degrees_to_radians(180)));
+        public static final double metersTrenchBallsFromWall = Units.inches_to_meters(27.25);
+        public static final double metersOpponentTrenchBallsFromWall = Units.inches_to_meters(296);
+        public static final double metersInitiationLineFromDriversStation =
+                Units.inches_to_meters(509.25);
+        public static final double widthOfBumpers = Units.inches_to_meters(3.2);
+        public static final double lengthOfRobot = Units.inches_to_meters(29);
+        public static final double metersCenterOfTowerFromSide = Units.inches_to_meters(94.665);
 
-        public static final Pose2d GalaticSearch_B_Red_startingPoint = new Pose2d(new Translation2d(Units.inches_to_meters(30), Units.inches_to_meters(150)), new Rotation2d(Units.degrees_to_radians(180)));
-        public static final Translation2d GalaticSearch_B_Red_firstBall = new Translation2d(Units.inches_to_meters(90), Units.inches_to_meters(120));
-        public static final Translation2d GalaticSearch_B_Red_secondBall = new Translation2d(Units.inches_to_meters(150), Units.inches_to_meters(60));
-        public static final Translation2d GalaticSearch_B_Red_thirdBall = new Translation2d(Units.inches_to_meters(210), Units.inches_to_meters(120));
-        public static final Pose2d GalaticSearch_B_Red_endingPoint = new Pose2d(new Translation2d(Units.inches_to_meters(330), Units.inches_to_meters(120)), new Rotation2d(Units.degrees_to_radians(180)));
-        
-        public static final Pose2d testStart = new Pose2d(new Translation2d(Units.inches_to_meters(0), Units.inches_to_meters(0)), new Rotation2d(Units.degrees_to_radians(0)));
-        public static final Translation2d test1 = new Translation2d(1, Units.inches_to_meters(0));
-        public static final Pose2d testEnd = new Pose2d(new Translation2d(2, -1.5), new Rotation2d(Units.degrees_to_radians(-90)));
 
-        public static final Pose2d AutoNav_Barrel_Race_Start = new Pose2d(new Translation2d(Units.inches_to_meters(30), Units.inches_to_meters(90)), new Rotation2d(0));
-        public static final Translation2d AUTONAV_Barrel_Race_1 = new Translation2d(4.127407, 2.179228);
-        public static final Translation2d AUTONAV_Barrel_Race_2 = new Translation2d(4.91, 1.8326);
-        public static final Translation2d AUTONAV_Barrel_Race_3 = new Translation2d(5.03, 1.115);
-        public static final Translation2d AUTONAV_Barrel_Race_4 = new Translation2d(4.33, 0.3812);
-        public static final Translation2d AUTONAV_Barrel_Race_5 = new Translation2d(3.418, 0.373);
-        public static final Translation2d AUTONAV_Barrel_Race_6 = new Translation2d(2.858, 1.121);
-        public static final Translation2d AUTONAV_Barrel_Race_7 = new Translation2d(3.058, 2.1);
-        public static final Pose2d AutoNav_Barrel_Race_END = new Pose2d(new Translation2d(3.058, 2.1), new Rotation2d(90));
+        public static final Translation2d trenchBall1 =
+                new Translation2d(Units.inches_to_meters(386.62), metersTrenchBallsFromWall);
+        public static final Translation2d trenchBall2 =
+                new Translation2d(Units.inches_to_meters(350.62), metersTrenchBallsFromWall);
+        public static final Translation2d trenchBall3 =
+                new Translation2d(Units.inches_to_meters(314.62), metersTrenchBallsFromWall);
+        public static final Pose2d startingPositionForTrenchRun =
+                new Pose2d(metersInitiationLineFromDriversStation, metersTrenchBallsFromWall,
+                        new Rotation2d(0));
+
+        public static final Translation2d initiationFrontOfTower = new Translation2d(
+                metersInitiationLineFromDriversStation, metersCenterOfTowerFromSide);
+        public static final Translation2d bumpersOnInitiationFrontOfTower = initiationFrontOfTower
+                .minus(new Translation2d(lengthOfRobot / 2 + widthOfBumpers, 0));
+        public static final Translation2d pointInFrontOfBallsInRendezvous =
+                new Translation2d(Units.inches_to_meters(389.9), Units.inches_to_meters(109.811));
+        public static final Translation2d pointBetweenRendezvousAndTrench =
+                new Translation2d(Units.inches_to_meters(444), Units.inches_to_meters(84));
+        public static final Pose2d robotInFrontOfTargetInitLine =
+                new Pose2d(bumpersOnInitiationFrontOfTower, new Rotation2d(0));
+        public static final Pose2d getBallsFromRendezvousPosition = new Pose2d(
+                pointInFrontOfBallsInRendezvous, new Rotation2d(Units.degrees_to_radians(-67.5)));
+        public static final Pose2d poseBetweenRendezvousAndTrench = new Pose2d(
+                pointBetweenRendezvousAndTrench, new Rotation2d(Units.degrees_to_radians(45)));
+
+        // **8 ball from opponent trench, NOT adjusted for bumpers*/
+        public static final Translation2d pointOnInitLineInFrontOfOpponentTrench =
+                new Translation2d(metersInitiationLineFromDriversStation,
+                        metersOpponentTrenchBallsFromWall);
+        public static final Translation2d pointOnOpponentTrenchForTwoBalls =
+                new Translation2d(Units.feet_to_meters(34.275), metersOpponentTrenchBallsFromWall);
+        public static final Translation2d pointOnInitLineToGetRendezvousBalls = new Translation2d(
+                metersInitiationLineFromDriversStation, Units.feet_to_meters(11.536));
+        public static final Translation2d pointToShootBallsFrom =
+                new Translation2d(Units.feet_to_meters(37.963), Units.feet_to_meters(12.822));
+        public static final Translation2d pointToIntakeTwoBallsFromRendezvous =
+                new Translation2d(Units.feet_to_meters(34.837), Units.feet_to_meters(14.614));
+        public static final Translation2d pointBeforeIntakeLastBallOnRendezvous =
+                new Translation2d(Units.feet_to_meters(37.927), Units.feet_to_meters(13.419));
+        public static final Translation2d pointForIntakeLastBallOnRendezvous =
+                new Translation2d(Units.feet_to_meters(35.655), Units.feet_to_meters(12.524));
+
+        /**
+         * the one perpendicular to the generator switch
+         */
+        public static final Rotation2d angleOfRendezvousForThreeBalls =
+                new Rotation2d(Units.degrees_to_radians(22.5));
+        public static final Rotation2d angleToShootLast3Balls =
+                new Rotation2d(Units.degrees_to_radians(-24));
     }
 
     public static class cClimber {

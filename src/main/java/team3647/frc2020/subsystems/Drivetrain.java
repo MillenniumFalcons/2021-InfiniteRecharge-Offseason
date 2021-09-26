@@ -323,8 +323,6 @@ public class Drivetrain implements PeriodicSubsystem {
 
     public void setVelocityMpS(double leftMPS, double rightMPS) {
         setVelocity(new DriveSignal(leftMPS, rightMPS));
-        System.out.println(periodicIO.leftOutput);
-        System.out.println(periodicIO.rightOutput);
     }
 
     /**
@@ -339,7 +337,6 @@ public class Drivetrain implements PeriodicSubsystem {
                 periodicIO.leftOutput = driveSignal.getLeft() / kEncoderVelocityToMetersPerSecond;
                 periodicIO.rightOutput = driveSignal.getRight() / kEncoderVelocityToMetersPerSecond;
                 controlType = ControlType.kVelocity;
-                
             }
         } else {
             HALMethods.sendDSError("Drive signal in setVelocity(DriveSignal) was null");
@@ -508,8 +505,8 @@ public class Drivetrain implements PeriodicSubsystem {
         // }
         setOpenLoop(new DriveSignal(leftMotorOutput, rightMotorOutput));
 
-        periodicIO.prevLeftDesiredVelocity = 0.6 * leftMotorOutput * m_leftPIDConfig.maxVelocity;
-        periodicIO.prevRightDesiredVelocity = 0.6 * rightMotorOutput * m_rightPIDConfig.maxVelocity;
+        periodicIO.prevLeftDesiredVelocity = leftMotorOutput * m_leftPIDConfig.maxVelocity;
+        periodicIO.prevRightDesiredVelocity = rightMotorOutput * m_rightPIDConfig.maxVelocity;
     }
 
     /**

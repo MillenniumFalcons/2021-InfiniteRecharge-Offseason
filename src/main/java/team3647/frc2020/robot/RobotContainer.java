@@ -256,15 +256,19 @@ public class RobotContainer {
                 new AccelerateFlywheelKickerWheel(m_flywheel, m_kickerWheel,
                 this::getFlywheelRPM,
                 m_visionController::isValid)));
-
+                // coController.rightBumper.whenActive(new RunCommand(m_ballStopper::extend, m_ballStopper));
 
                 coController.leftMidButton.whenActive(new InstantCommand(() -> {
                         m_visionController.setPipeline(Pipeline.SUNNY_TARGETING);
                 }));
 
+                // coController.rightMidButton.whenActive(new InstantCommand(() -> {
+                // m_visionController.setPipeline(Pipeline.CLOSE);
+                // }));
                 coController.rightMidButton.whenActive(new InstantCommand(() -> {
-                m_visionController.setPipeline(Pipeline.CLOSE);
-                }));
+                        m_visionController.setPipeline(Pipeline.OUTSIDE_CLOUDY);
+                        }));
+
 
 
                 coController.rightTrigger.whenActive(new ParallelCommandGroup(
@@ -316,7 +320,6 @@ public class RobotContainer {
 
         public void init() {
                 m_drivetrain.init();
-                m_drivetrain.setOdometry(Trajectories.AutoNav_BarrelRace.getInitialPose(), new Rotation2d());
                 m_flywheel.init();
                 m_indexer.init();
                 m_intake.init();
@@ -334,34 +337,49 @@ public class RobotContainer {
                 m_intake.retractInner();
         }
 
-        private final RamseteCommand GalaticSearch_PathA_Red_Movement = new RamseteCommand(
-                        Trajectories.GalaticSearch_A_RedTraject, m_drivetrain::getPose, new RamseteController(),
-                        Constants.cDrivetrain.kDriveKinematics, m_drivetrain::setVelocityMpS, m_drivetrain);
 
-        private final RamseteCommand GalaticSearch_PathB_Red_Movement = new RamseteCommand(
-                        Trajectories.GalaticSearch_B_RedTraject, m_drivetrain::getPose, new RamseteController(),
-                        Constants.cDrivetrain.kDriveKinematics, m_drivetrain::setVelocityMpS, m_drivetrain);
-
-        private final RamseteCommand AutoNav_BarrelRace_Movement = new RamseteCommand(Trajectories.AutoNav_BarrelRace,
-                        m_drivetrain::getPose, new RamseteController(), Constants.cDrivetrain.kDriveKinematics,
-                        m_drivetrain::setVelocityMpS, m_drivetrain);
-
-        private final RamseteCommand straight2m = new RamseteCommand(Trajectories.test, m_drivetrain::getPose,
-                        new RamseteController(), Constants.cDrivetrain.kDriveKinematics, m_drivetrain::setVelocityMpS,
-                        m_drivetrain);
-
+        
         // once deadline ends, the other command ends
         // Galatic search
-        private final ParallelDeadlineGroup GalaticSearch_PathA_Red = new ParallelDeadlineGroup(
-                        GalaticSearch_PathA_Red_Movement,
-                        new ParallelCommandGroup(new LoadBalls(m_indexer, m_ballStopper), new GroundIntake(m_intake)));
-        private final ParallelDeadlineGroup GalaticSearch_PathB_Red = new ParallelDeadlineGroup(
-                        GalaticSearch_PathB_Red_Movement,
-                        new ParallelCommandGroup(new LoadBalls(m_indexer, m_ballStopper), new GroundIntake(m_intake)));
+
+        private final RamseteCommand initiationLineToTrench =
+                        new RamseteCommand(Trajectories.initiationLineToTrenchBalls, m_drivetrain::getPose,
+                                new RamseteController(), Constants.cDrivetrain.kDriveKinematics,
+                                m_drivetrain::setVelocityMpS, m_drivetrain);
+        private final RamseteCommand trenchToCenterTower = new RamseteCommand(
+                        Trajectories.trenchBall3ToFrontOfTower, m_drivetrain::getPose, new RamseteController(),
+                        Constants.cDrivetrain.kDriveKinematics, m_drivetrain::setVelocityMpS, m_drivetrain);
+
+        private final Command sequence = new SequentialCommandGroup(
+                                new TurretMotionMagic(m_turret, 30).withTimeout(.4),
+                                new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
+                                        m_visionController::getFilteredYaw, m_visionController::isValid)
+                                                .withTimeout(.3),
+                                new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
+                                        this::getFlywheelRPM, Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
+                                        IndexerSignal.GO_FAST).withTimeout(3),
+                                new StopShooting(m_flywheel, m_kickerWheel, m_indexer),
+                                new ParallelDeadlineGroup(initiationLineToTrench,
+                                        new GroundIntakeSequence(m_intake, m_indexer, m_ballStopper)),
+                                new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1),
+                                new ParallelDeadlineGroup(
+                                        trenchToCenterTower,
+                                        new SequentialCommandGroup(
+                                                new StowIntakeAndOrganizeFeeder(m_intake, m_indexer, m_kickerWheel)
+                                                        .withTimeout(2),
+                                                new LoadBalls(m_indexer, m_ballStopper)),
+                                        new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
+                                                m_visionController::getFilteredYaw, m_visionController::isValid),
+                                        new AccelerateFlywheelKickerWheel(m_flywheel, m_kickerWheel, 4000, true)),
+                                new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1),
+                                new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
+                                        this::getFlywheelRPM, Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
+                                        IndexerSignal.GO_FAST).withTimeout(4),
+                                new StopShooting(m_flywheel, m_kickerWheel, m_indexer));
 
         public Command getAutonomousCommand() {
 
-                return AutoNav_BarrelRace_Movement;
+                return sequence;
         }
 
         public void stopDrivetrain() {

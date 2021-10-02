@@ -303,6 +303,7 @@ public class Constants {
             return distance;
         }
 
+        //when distance is ___ fly wheel RPM is ___
         public static double[][] kFlywheelDistanceRPM =
                 {{Units.feet_to_meters(4), 2500}, {Units.feet_to_meters(6), 3000},
                         {Units.feet_to_meters(8), 3500}, {Units.feet_to_meters(10), 4000},
@@ -384,7 +385,7 @@ public class Constants {
                 new Translation2d(Units.inches_to_meters(314.62), metersTrenchBallsFromWall);
         public static final Pose2d startingPositionForTrenchRun =
                 new Pose2d(metersInitiationLineFromDriversStation, metersTrenchBallsFromWall,
-                        new Rotation2d(0));
+                        new Rotation2d(Units.degrees_to_radians(0)));
 
         public static final Translation2d initiationFrontOfTower = new Translation2d(
                 metersInitiationLineFromDriversStation, metersCenterOfTowerFromSide);
@@ -425,6 +426,19 @@ public class Constants {
                 new Rotation2d(Units.degrees_to_radians(22.5));
         public static final Rotation2d angleToShootLast3Balls =
                 new Rotation2d(Units.degrees_to_radians(-24));
+        /**
+         * the one perpendicular to the generator switch
+         */
+
+        public static final Pose2d startPosition = 
+                new Pose2d(0,0,new Rotation2d(0));
+
+        public static final Translation2d unreacheblePoint1 =
+                new Translation2d(2,0);
+                
+        public static final Pose2d unreacheblePoint2 =
+        new Pose2d(2,2, new Rotation2d(Units.degrees_to_radians(90)));
+        
     }
 
     public static class cClimber {

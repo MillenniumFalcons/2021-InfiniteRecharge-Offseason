@@ -323,6 +323,14 @@ public class Drivetrain implements PeriodicSubsystem {
         shifted = value;
     }
 
+    public double getShifter() {
+        if (shifted) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     public void setVelocityMpS(double leftMPS, double rightMPS) {
         setVelocity(new DriveSignal(leftMPS, rightMPS));
     }
@@ -510,6 +518,7 @@ public class Drivetrain implements PeriodicSubsystem {
         periodicIO.prevLeftDesiredVelocity = leftMotorOutput * m_leftPIDConfig.maxVelocity;
         periodicIO.prevRightDesiredVelocity = rightMotorOutput * m_rightPIDConfig.maxVelocity;
     }
+
 
     /**
      * Returns 0.0 if the given value is within the specified range around zero. The remaining range

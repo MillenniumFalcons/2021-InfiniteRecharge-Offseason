@@ -309,7 +309,7 @@ public class Constants {
                         {Units.feet_to_meters(8), 3500}, {Units.feet_to_meters(10), 4000},
                         {Units.feet_to_meters(12), 4500}, {Units.feet_to_meters(14), 4800},
                         {Units.feet_to_meters(16), 4900}, {Units.feet_to_meters(18), 5300},
-                        {Units.feet_to_meters(20), 5500}, {Units.meters_to_feet(22), 5700}};
+                        {Units.feet_to_meters(20), 5500}, {Units.feet_to_meters(22), 5700}};
 
         public static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> kFlywheelAutoAimMap =
                 new InterpolatingTreeMap<>();
@@ -383,6 +383,43 @@ public class Constants {
                 new Translation2d(Units.inches_to_meters(350.62), metersTrenchBallsFromWall);
         public static final Translation2d trenchBall3 =
                 new Translation2d(Units.inches_to_meters(314.62), metersTrenchBallsFromWall);
+        
+        //left to right
+        public static final Translation2d switchTopBall1 = 
+                new Translation2d(Units.inches_to_meters(358.87), Units.inches_to_meters(159.385));
+        public static final Translation2d switchTopBall2 = 
+                new Translation2d(Units.inches_to_meters(377.34), Units.inches_to_meters(167.045));
+
+        public static final Translation2d switchBottomBall1 = 
+                new Translation2d(Units.inches_to_meters(352.56), Units.inches_to_meters(122.345));
+        public static final Translation2d switchBottomBall2 = 
+                new Translation2d(Units.inches_to_meters(371.04), Units.inches_to_meters(129.995));
+        public static final Translation2d switchBottomBall3 = 
+                new Translation2d(Units.inches_to_meters(389.52), Units.inches_to_meters(137.655));
+
+        
+        public static final Pose2d switchTopBall1Pose = 
+                new Pose2d(switchTopBall1, new Rotation2d(Units.degrees_to_radians(-90)));
+
+        public static final Translation2d pollSequerePoint1 = 
+                new Translation2d(Units.inches_to_meters(400), Units.inches_to_meters(180));
+
+        public static final Translation2d farTestPoint1 = 
+                new Translation2d(Units.inches_to_meters(330), Units.inches_to_meters(148));
+
+        public static final Translation2d farTestPoint2 = 
+                new Translation2d(Units.inches_to_meters(310), Units.inches_to_meters(150));
+
+        public static final Translation2d farTestPoint3 = 
+                new Translation2d(Units.inches_to_meters(300), Units.inches_to_meters(130));
+
+        public static final Translation2d farTestPoint4 = 
+                new Translation2d(Units.inches_to_meters(320), Units.inches_to_meters(110));
+
+        public static final Translation2d pollSequerePoin2 = 
+                new Translation2d(Units.inches_to_meters(400), Units.inches_to_meters(90));
+
+//SIX BALL BOTTOM//////////////////////////////////////////////////////////////
         public static final Pose2d startingPositionForTrenchRun =
                 new Pose2d(metersInitiationLineFromDriversStation, metersTrenchBallsFromWall,
                         new Rotation2d(Units.degrees_to_radians(0)));
@@ -402,7 +439,7 @@ public class Constants {
         public static final Pose2d poseBetweenRendezvousAndTrench = new Pose2d(
                 pointBetweenRendezvousAndTrench, new Rotation2d(Units.degrees_to_radians(45)));
 
-        // **8 ball from opponent trench, NOT adjusted for bumpers*/
+// **8 ball from opponent trench, NOT adjusted for bumpers*//////////////////
         public static final Translation2d pointOnInitLineInFrontOfOpponentTrench =
                 new Translation2d(metersInitiationLineFromDriversStation,
                         metersOpponentTrenchBallsFromWall);
@@ -429,16 +466,40 @@ public class Constants {
         /**
          * the one perpendicular to the generator switch
          */
-
-        public static final Pose2d startPosition = 
-                new Pose2d(0,0,new Rotation2d(0));
-
-        public static final Translation2d unreacheblePoint1 =
-                new Translation2d(2,0);
-                
-        public static final Pose2d unreacheblePoint2 =
-        new Pose2d(2,2, new Rotation2d(Units.degrees_to_radians(90)));
         
+//MIDDLE 5 BALLS
+        public static final Pose2d centerOnInit =
+                new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(161.625), new Rotation2d(0));
+
+        public static final Translation2d adjustmentPointBetweenSwitchInitLine  =
+                new Translation2d(Units.feet_to_meters(450), Units.feet_to_meters(150)); 
+        
+        public static final Pose2d endPositionForMiddle8Ball = 
+                new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(94.57), new Rotation2d(0));
+        // transperent
+        public static final Translation2d topToBottomTransRendevousPoint = 
+                new Translation2d(Units.inches_to_meters(336),Units.inches_to_meters(151));
+
+                
+        public static final Pose2d topToBottomTransRendevousPose = 
+        new Pose2d(Units.inches_to_meters(336),Units.inches_to_meters(151), new Rotation2d(Units.degrees_to_radians(0)));
+
+        public static final Pose2d bottom1EndPose =
+        new Pose2d(Units.inches_to_meters(480), Units.inches_to_meters(100), new Rotation2d(0));
+
+//High 5 ball auto
+
+        public static final Pose2d startingPosInfrontOfEnemyTrench = 
+                new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(295.5), new Rotation2d(0));
+        public static final Translation2d midPointToTrench = 
+                new Translation2d(Units.inches_to_meters(422.68), Units.inches_to_meters(295.5));
+        public static final Translation2d twoTrenchBalls = 
+                new Translation2d(Units.inches_to_meters(378.89), Units.inches_to_meters(295.5));
+        public static final Pose2d endShootPose  = 
+                new Pose2d(Units.inches_to_meters(430), Units.inches_to_meters(120), new Rotation2d(0));
+                
+        
+                
     }
 
     public static class cClimber {

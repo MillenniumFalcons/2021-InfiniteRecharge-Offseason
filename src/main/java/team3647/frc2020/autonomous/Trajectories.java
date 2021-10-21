@@ -139,4 +139,12 @@ public static Trajectory trenchBall3ToFrontOfTower = TrajectoryGenerator.generat
         //public static Trajectory trenchToShoot = 
                 //TrajectoryGenerator.generateTrajectory(, interiorWaypoints, end, config)
 
+<<<<<<< Updated upstream
+=======
+        //hide away 3 ball auto
+        /*public static Trajectory threeBallLow = 
+                TrajectoryGenerator.generateTrajectory(cField.startingPosDirectlyToShoot, 
+                List.of(), new Pose2d(cField.hideAway, new Rotation2d(0)), forwardTrajectoryConfig);
+*/
+>>>>>>> Stashed changes
 }

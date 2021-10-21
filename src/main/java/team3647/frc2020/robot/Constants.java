@@ -487,19 +487,23 @@ public class Constants {
         public static final Pose2d bottom1EndPose =
         new Pose2d(Units.inches_to_meters(480), Units.inches_to_meters(100), new Rotation2d(0));
 
-//High 5 ball auto
-
-        public static final Pose2d startingPosInfrontOfEnemyTrench = 
-                new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(295.5), new Rotation2d(0));
-        public static final Translation2d midPointToTrench = 
-                new Translation2d(Units.inches_to_meters(422.68), Units.inches_to_meters(295.5));
-        public static final Translation2d twoTrenchBalls = 
-                new Translation2d(Units.inches_to_meters(378.89), Units.inches_to_meters(295.5));
-        public static final Pose2d endShootPose  = 
-                new Pose2d(Units.inches_to_meters(430), Units.inches_to_meters(120), new Rotation2d(0));
-                
+// Top Auto Points
+        public static final Pose2d startingPosInfrontLoading =
+                new Pose2d(Units.inches_to_meters(120), Units.inches_to_meters(100), new Rotation2d(0));
+        public static final Translation2d topFirstTranslation1 =
+                new Translation2d(Units.inches_to_meters(220), Units.inches_to_meters(90));
+        public static final Pose2d bySydeToControlPanel =
+                new Pose2d(Units.inches_to_meters(250), Units.inches_to_meters(32), new Rotation2d(Units.degrees_to_radians(-90)));
         
-                
+        
+        public static final Pose2d infrontOfTargetParallelToControlPanel = 
+                new Pose2d(Units.inches_to_meters(150), Units.inches_to_meters(230), new Rotation2d(Units.degrees_to_radians(0)));
+
+//Straight Auto Points
+        public static final Pose2d startingPoseInfrontOfPoleOnInit = 
+                new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(126.879), new Rotation2d(0));
+        public static final Pose2d endingPoseBumpersTouchWall = 
+                new Pose2d(Units.inches_to_meters(629.25), Units.inches_to_meters(126.879), new Rotation2d(0));
     }
 
     public static class cClimber {

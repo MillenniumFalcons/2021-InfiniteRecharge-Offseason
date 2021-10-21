@@ -132,11 +132,23 @@ public static Trajectory trenchBall3ToFrontOfTower = TrajectoryGenerator.generat
                 cField.bottom1EndPose, forwardTrajectoryConfig);
 
 /////
-        public static Trajectory fiveBallHigh = 
-                TrajectoryGenerator.generateTrajectory(cField.startingPosInfrontOfEnemyTrench, 
-                List.of(cField.midPointToTrench),
-                 new Pose2d(cField.twoTrenchBalls, new Rotation2d(0)), reverseTrajectoryConfig);
+        // public static Trajectory fiveBallHigh = 
+        //         TrajectoryGenerator.generateTrajectory(cField.startingPosInfrontOfEnemyTrench, 
+        //         List.of(cField.midPointToTrench),
+        //          new Pose2d(cField.twoTrenchBalls, new Rotation2d(0)), reverseTrajectoryConfig);
         //public static Trajectory trenchToShoot = 
                 //TrajectoryGenerator.generateTrajectory(, interiorWaypoints, end, config)
+
+        public static Trajectory topStartToContorlPannelBalls =
+                TrajectoryGenerator.generateTrajectory(
+                        Constants.cField.startingPosInfrontLoading,
+                        List.of(Constants.cField.topFirstTranslation1),
+                        Constants.cField.bySydeToControlPanel,
+                        reverseTrajectoryConfig);
+
+        public static Trajectory controlPanelBallsToTarget = 
+                TrajectoryGenerator.generateTrajectory(
+                        Constants.cField.bySydeToControlPanel, List.of(),
+                        Constants.cField.infrontOfTargetParallelToControlPanel, forwardTrajectoryConfig);
 
 }

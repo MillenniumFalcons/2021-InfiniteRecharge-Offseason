@@ -497,9 +497,13 @@ public class Constants {
                 new Translation2d(Units.inches_to_meters(378.89), Units.inches_to_meters(295.5));
         public static final Pose2d endShootPose  = 
                 new Pose2d(Units.inches_to_meters(430), Units.inches_to_meters(120), new Rotation2d(0));
-                
+ 
+//hide away 3 ball auto
+        public static final Pose2d startingPosDirectlyToShoot = 
+                new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(27.25), new Rotation2d(0));
         
-                
+        public static final Translation2d hideAway =
+                new Translation2d(Units.inches_to_meters(575), Units.inches_to_meters(27.25));
     }
 
     public static class cClimber {

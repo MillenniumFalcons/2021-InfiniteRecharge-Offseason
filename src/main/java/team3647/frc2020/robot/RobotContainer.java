@@ -245,11 +245,11 @@ public class RobotContainer {
                                 new KickerWheelOpenloop(m_kickerWheel, -1)));
 
                 coController.rightBumper.whenActive(new ParallelCommandGroup(
-                new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
-                m_visionController::getFilteredYaw, m_visionController::isValid),
-                new AccelerateFlywheelKickerWheel(m_flywheel, m_kickerWheel,
-                this::getFlywheelRPM,
-                m_visionController::isValid)));
+                        new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
+                                m_visionController::getFilteredYaw, m_visionController::isValid),
+                        new AccelerateFlywheelKickerWheel(m_flywheel, m_kickerWheel,
+                                this::getFlywheelRPM,
+                        m_visionController::isValid)));
                 // coController.rightBumper.whenActive(new RunCommand(m_ballStopper::extend, m_ballStopper));
 
                 coController.leftMidButton.whenActive(new InstantCommand(() -> {
@@ -264,14 +264,11 @@ public class RobotContainer {
                         }));
 
 
-
-                coController.rightTrigger.whenActive(new ParallelCommandGroup(
-                                new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
-                                                m_visionController::getFilteredYaw, m_visionController::isValid),
-                                new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
-                                                this::getFlywheelRPM,
-                                                Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
-                                                IndexerSignal.GO_FAST)));
+                mainController.rightTrigger.whenActive(
+                        new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
+                                this::getFlywheelRPM,
+                                Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
+                                IndexerSignal.GO_FAST));
 
                 coController.leftJoyStickPress.whenActive(new TurretManual(m_turret, coController::getLeftStickX));
                 coController.rightJoyStickPress.whenPressed(new StowIntakeCompletely(m_intake).withTimeout(.1));
@@ -292,7 +289,7 @@ public class RobotContainer {
                 // new TrenchShot(m_flywheel, m_kickerWheel, m_indexer)
                 // );
 
-                coController.rightTrigger.whenReleased(new StopShooting(m_flywheel, m_kickerWheel, m_indexer));
+                mainController.rightTrigger.whenReleased(new StopShooting(m_flywheel, m_kickerWheel, m_indexer));
 
                 coController.buttonB.whenReleased(new StopShooting(m_flywheel, m_kickerWheel, m_indexer));
 
@@ -405,8 +402,24 @@ public class RobotContainer {
         //         middle8BallsPath,  
         //         new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1));
                 
-        
-                                
+//hide away 3 ball auto
+        private final RamseteCommand initiationLineToHide = new RamseteCommand(
+                Trajectories.threeBallLow, m_drivetrain::getPose, new RamseteController(),
+                Constants.cDrivetrain.kDriveKinematics, m_drivetrain::setVelocityMpS, m_drivetrain);
+             
+        private final Command hiddenThree = new SequentialCommandGroup(
+                new TurretMotionMagic(m_turret, 30).withTimeout(.4),
+                new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
+                        m_visionController::getFilteredYaw, m_visionController::isValid)
+                        .withTimeout(.3),
+                new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
+                        this::getFlywheelRPM, Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
+                        IndexerSignal.GO_FAST).withTimeout(3),
+                        initiationLineToHide,
+                new StopShooting(m_flywheel, m_kickerWheel, m_indexer),
+                new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1));
+
+                           
         public Command getAutonomousCommand() {
 
                 return sixBallBottom;

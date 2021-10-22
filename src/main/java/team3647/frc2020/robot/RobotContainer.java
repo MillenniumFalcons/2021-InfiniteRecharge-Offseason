@@ -361,6 +361,10 @@ public class RobotContainer {
         private final RamseteCommand controlPanelToTarget = new RamseteCommand(Trajectories.controlPanelBallsToTarget,
         m_drivetrain::getPose, new RamseteController(), Constants.cDrivetrain.kDriveKinematics, m_drivetrain::setVelocityMpS, m_drivetrain);
 
+//straigh three in front of pole 
+        private final RamseteCommand poleToWall = new RamseteCommand(Trajectories.straightToTarget,m_drivetrain::getPose, new RamseteController(),
+        Constants.cDrivetrain.kDriveKinematics, m_drivetrain::setVelocityMpS, m_drivetrain);
+
 
 
 
@@ -380,7 +384,7 @@ public class RobotContainer {
 
 //SIX BALL BOTTOM (SHOOT 3 GRAB 3 IN TRENCH SHOOT)
         private final Command sixBallBottom =  new SequentialCommandGroup(
-                new TurretMotionMagic(m_turret, 30).withTimeout(.4),
+                new TurretMotionMagic(m_turret, 35).withTimeout(.5),
                 new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
                         m_visionController::getFilteredYaw, m_visionController::isValid)
                                 .withTimeout(.3),
@@ -440,6 +444,15 @@ public class RobotContainer {
                         this::getFlywheelRPM, Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
                         IndexerSignal.GO_FAST).withTimeout(4),
                 new StopShooting(m_flywheel, m_kickerWheel, m_indexer));
+
+//in front of pole to wall straight 3 ball
+        private final Command topStraight = new SequentialCommandGroup(new TurretMotionMagic(m_turret, -10).withTimeout(.4),
+        new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
+                m_visionController::getFilteredYaw, m_visionController::isValid)
+                        .withTimeout(.3), new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
+                this::getFlywheelRPM, Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
+                IndexerSignal.GO_FAST).withTimeout(3),
+        new StopShooting(m_flywheel, m_kickerWheel, m_indexer), poleToWall, new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1));
         
         
                                 

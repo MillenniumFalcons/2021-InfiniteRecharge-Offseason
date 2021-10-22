@@ -151,4 +151,7 @@ public static Trajectory trenchBall3ToFrontOfTower = TrajectoryGenerator.generat
                         Constants.cField.bySydeToControlPanel, List.of(),
                         Constants.cField.infrontOfTargetParallelToControlPanel, forwardTrajectoryConfig);
 
+        public static Trajectory straightToTarget = 
+                TrajectoryGenerator.generateTrajectory(
+                        Constants.cField.startingPoseInfrontOfPoleOnInit, List.of(), Constants.cField.endingPoseBumpersTouchWall, forwardTrajectoryConfig);
 }

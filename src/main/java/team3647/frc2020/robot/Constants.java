@@ -503,7 +503,7 @@ public class Constants {
         public static final Pose2d startingPoseInfrontOfPoleOnInit = 
                 new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(126.879), new Rotation2d(0));
         public static final Pose2d endingPoseBumpersTouchWall = 
-                new Pose2d(Units.inches_to_meters(629.25), Units.inches_to_meters(126.879), new Rotation2d(0));
+                new Pose2d(Units.inches_to_meters(605), Units.inches_to_meters(126.879), new Rotation2d(0));
     }
 
     public static class cClimber {

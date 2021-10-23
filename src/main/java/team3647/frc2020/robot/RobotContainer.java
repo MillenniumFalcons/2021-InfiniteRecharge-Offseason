@@ -319,7 +319,8 @@ public class RobotContainer {
                 //EIGHT BALL MIDDLE AUTO
                 //m_drivetrain.setOdometry(Constants.cField.centerOnInit, new Rotation2d(0));
                 //FIVE BALL TOP AUTO
-                m_drivetrain.setOdometry(Constants.cField.startingPosInfrontLoading, new Rotation2d(0));
+                //m_drivetrain.setOdometry(Constants.cField.startingPosInfrontLoading, new Rotation2d(0));
+                m_drivetrain.setOdometry(Constants.cField.startingPoseInfrontOfPoleOnInit, new Rotation2d(0));
                 m_flywheel.init();
                 m_indexer.init();
                 m_intake.init();
@@ -457,7 +458,7 @@ public class RobotContainer {
         
                                 
         public Command getAutonomousCommand() {
-                return topFive;
+                return topStraight;
         }       
 
         public void stopDrivetrain() {

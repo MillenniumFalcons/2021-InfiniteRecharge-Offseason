@@ -272,19 +272,19 @@ public class RobotContainer {
                         }));
 
                 
-                        // mainController.rightTrigger.whenActive(new ParallelCommandGroup(
-                        //         new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
-                        //                         m_visionController::getFilteredYaw, m_visionController::isValid),
-                        //         new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
-                        //                         this::getFlywheelRPM,
-                        //                         Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
-                        //                         IndexerSignal.GO_FAST)));
-
-                mainController.rightTrigger.whenActive(
+                mainController.rightTrigger.whenActive(new ParallelCommandGroup(
+                        new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
+                                        m_visionController::getFilteredYaw, m_visionController::isValid),
                         new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
                                         this::getFlywheelRPM,
                                         Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
-                                        IndexerSignal.GO_FAST));
+                                        IndexerSignal.GO_FAST)));
+
+                // mainController.rightTrigger.whenActive(
+                //         new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
+                //                         this::getFlywheelRPM,
+                //                         Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
+                //                         IndexerSignal.GO_FAST));
 
                 coController.leftJoyStickPress.whenActive(new TurretManual(m_turret, coController::getLeftStickX));
                 coController.rightJoyStickPress.whenPressed(new StowIntakeCompletely(m_intake).withTimeout(.1));

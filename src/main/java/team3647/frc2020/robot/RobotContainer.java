@@ -263,7 +263,11 @@ public class RobotContainer {
                         m_visionController.setPipeline(Pipeline.CLOSE);
                         }));
 
-
+                mainController.rightTrigger.whenActive(
+                        new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
+                                this::getFlywheelRPM,
+                                Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
+                                IndexerSignal.GO_FAST));
                 
 
                 coController.leftJoyStickPress.whenActive(new TurretManual(m_turret, coController::getLeftStickX));
@@ -285,7 +289,7 @@ public class RobotContainer {
                 // new TrenchShot(m_flywheel, m_kickerWheel, m_indexer)
                 // );
 
-                
+                mainController.rightTrigger.whenReleased(new StopShooting(m_flywheel, m_kickerWheel, m_indexer));
 
                 coController.buttonB.whenReleased(new StopShooting(m_flywheel, m_kickerWheel, m_indexer));
 

@@ -360,7 +360,7 @@ public class RobotContainer {
         Constants.cDrivetrain.kDriveKinematics, m_drivetrain::setVelocityMpS, m_drivetrain);
 
         private final Command sixBallBottom =  new SequentialCommandGroup(
-                new TurretMotionMagic(m_turret, 30).withTimeout(.4),
+                new TurretMotionMagic(m_turret, 35).withTimeout(.6),
                 new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
                         m_visionController::getFilteredYaw, m_visionController::isValid)
                                 .withTimeout(.3),

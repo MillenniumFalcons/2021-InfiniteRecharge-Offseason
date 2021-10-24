@@ -265,8 +265,8 @@ public class RobotContainer {
 
 
 
-                        mainController.rightTrigger.whenActive(
-                                new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
+                mainController.rightTrigger.whenActive(
+                        new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
                                         this::getFlywheelRPM,
                                         Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
                                         IndexerSignal.GO_FAST));
@@ -291,6 +291,7 @@ public class RobotContainer {
                 // );
 
                 mainController.rightTrigger.whenReleased(new StopShooting(m_flywheel, m_kickerWheel, m_indexer));
+                coController.rightBumper.whenReleased(new StopShooting(m_flywheel, m_kickerWheel, m_indexer));
 
                 coController.buttonB.whenReleased(new StopShooting(m_flywheel, m_kickerWheel, m_indexer));
 

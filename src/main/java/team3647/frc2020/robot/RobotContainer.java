@@ -360,14 +360,14 @@ public class RobotContainer {
         Constants.cDrivetrain.kDriveKinematics, m_drivetrain::setVelocityMpS, m_drivetrain);
 
         private final Command sixBallBottom =  new SequentialCommandGroup(
-                new TurretMotionMagic(m_turret, 35).withTimeout(.6),
+                new TurretMotionMagic(m_turret, 30).withTimeout(.6),
                 new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
                         m_visionController::getFilteredYaw, m_visionController::isValid)
-                                .withTimeout(.3),
-                new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
-                        this::getFlywheelRPM, Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
-                        IndexerSignal.GO_FAST).withTimeout(3),
-                new StopShooting(m_flywheel, m_kickerWheel, m_indexer),
+                                .withTimeout(1),
+                new ParallelCommandGroup(new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
+                this::getFlywheelRPM, Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
+                IndexerSignal.GO_FAST).withTimeout(3), new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
+                m_visionController::getFilteredYaw, m_visionController::isValid)), new StopShooting(m_flywheel, m_kickerWheel, m_indexer),
                 new ParallelDeadlineGroup(initiationLineToTrench,
                         new GroundIntakeSequence(m_intake, m_indexer, m_ballStopper)),
                 new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1),
@@ -381,9 +381,10 @@ public class RobotContainer {
                                 m_visionController::getFilteredYaw, m_visionController::isValid),
                         new AccelerateFlywheelKickerWheel(m_flywheel, m_kickerWheel, 4000, true)),
                 new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1),
-                new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
-                        this::getFlywheelRPM, Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
-                        IndexerSignal.GO_FAST).withTimeout(4),
+                new ParallelCommandGroup(new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
+                this::getFlywheelRPM, Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
+                IndexerSignal.GO_FAST).withTimeout(3), new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
+                m_visionController::getFilteredYaw, m_visionController::isValid)),
                 new StopShooting(m_flywheel, m_kickerWheel, m_indexer));
         //MID FIVE////////////////////////////
 

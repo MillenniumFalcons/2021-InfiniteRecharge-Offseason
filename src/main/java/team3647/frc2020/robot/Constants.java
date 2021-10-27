@@ -489,15 +489,15 @@ public class Constants {
 
 // Top Auto Points
         public static final Pose2d startingPosInfrontLoading =
-                new Pose2d(Units.inches_to_meters(120), Units.inches_to_meters(100), new Rotation2d(0));
+                new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(230), new Rotation2d(0));
         public static final Translation2d topFirstTranslation1 =
-                new Translation2d(Units.inches_to_meters(220), Units.inches_to_meters(90));
+                new Translation2d(Units.inches_to_meters(400), Units.inches_to_meters(200));
         public static final Pose2d bySydeToControlPanel =
-                new Pose2d(Units.inches_to_meters(250), Units.inches_to_meters(32), new Rotation2d(Units.degrees_to_radians(-90)));
+                new Pose2d(Units.inches_to_meters(378.9), Units.inches_to_meters(295), new Rotation2d(Units.degrees_to_radians(-90)));
         
         
         public static final Pose2d infrontOfTargetParallelToControlPanel = 
-                new Pose2d(Units.inches_to_meters(150), Units.inches_to_meters(230), new Rotation2d(Units.degrees_to_radians(0)));
+                new Pose2d(Units.inches_to_meters(450), Units.inches_to_meters(100), new Rotation2d(Units.degrees_to_radians(-90)));
 
 //Straight Auto Points
         public static final Pose2d startingPoseInfrontOfPoleOnInit = 

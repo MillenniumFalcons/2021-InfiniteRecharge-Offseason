@@ -320,7 +320,7 @@ public class RobotContainer {
                 //m_drivetrain.setOdometry(Constants.cField.centerOnInit, new Rotation2d(0));
                 //FIVE BALL TOP AUTO
                 //m_drivetrain.setOdometry(Constants.cField.startingPosInfrontLoading, new Rotation2d(0));
-                m_drivetrain.setOdometry(Constants.cField.startingPoseInfrontOfPoleOnInit, new Rotation2d(0));
+                m_drivetrain.setOdometry(Constants.cField.startingPosInfrontLoading, new Rotation2d(0));
                 m_flywheel.init();
                 m_indexer.init();
                 m_intake.init();
@@ -438,9 +438,9 @@ public class RobotContainer {
                                                         .withTimeout(2),
                                                 new LoadBalls(m_indexer, m_ballStopper))),
                         new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1),
+                        new TurretMotionMagic(m_turret, 90),
                         new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
-                                m_visionController::getFilteredYaw, m_visionController::isValid),
-                        new AccelerateFlywheelKickerWheel(m_flywheel, m_kickerWheel, 4000, true),
+                                m_visionController::getFilteredYaw, m_visionController::isValid).withTimeout(1),
                 new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
                         this::getFlywheelRPM, Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
                         IndexerSignal.GO_FAST).withTimeout(4),
@@ -458,7 +458,7 @@ public class RobotContainer {
         
                                 
         public Command getAutonomousCommand() {
-                return topStraight;
+                return topFive;
         }       
 
         public void stopDrivetrain() {

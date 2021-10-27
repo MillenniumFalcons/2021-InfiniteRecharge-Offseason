@@ -493,7 +493,7 @@ public class Constants {
         public static final Translation2d topFirstTranslation1 =
                 new Translation2d(Units.inches_to_meters(400), Units.inches_to_meters(200));
         public static final Pose2d bySydeToControlPanel =
-                new Pose2d(Units.inches_to_meters(378.9), Units.inches_to_meters(295), new Rotation2d(Units.degrees_to_radians(-90)));
+                new Pose2d(Units.inches_to_meters(392), Units.inches_to_meters(295), new Rotation2d(Units.degrees_to_radians(-90)));
         
         
         public static final Pose2d infrontOfTargetParallelToControlPanel = 

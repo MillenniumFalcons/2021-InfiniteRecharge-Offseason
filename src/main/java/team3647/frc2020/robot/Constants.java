@@ -453,7 +453,22 @@ public class Constants {
          * the one perpendicular to the generator switch
          */
         
+//MIDDLE 5 BALLS
+        public static final Pose2d centerOnInit =
+        new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(161.625), new Rotation2d(0));
 
+        public static final Translation2d pollSequerePoint1 = 
+        new Translation2d(Units.inches_to_meters(400), Units.inches_to_meters(180));
+
+        public static final Translation2d rendezvousTopToBottomTransition = 
+        new Translation2d(Units.inches_to_meters(323), Units.inches_to_meters(133));
+
+
+        public static final Pose2d topToBottomTransRendevousPose = 
+        new Pose2d(Units.inches_to_meters(336),Units.inches_to_meters(151), new Rotation2d(Units.degrees_to_radians(0)));
+
+        public static final Pose2d bottom1EndPose =
+        new Pose2d(Units.inches_to_meters(480), Units.inches_to_meters(100), new Rotation2d(0));
 
 // Top Auto Points
         public static final Pose2d startingPosInfrontLoading =

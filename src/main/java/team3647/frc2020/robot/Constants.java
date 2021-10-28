@@ -56,6 +56,7 @@ public class Constants {
 
         public static final double kMaxSpeedMetersPerSecond = 2;
         public static final double kMaxAccelerationMetersPerSecondSquared = 2;
+        public static final double fastBoiAutoAccel = 4;
 
         public static final double maxVoltage = 11.0;
         public static final double gearboxReduction = 9.0 / 42.0 * 24.0 / 50.0;
@@ -163,11 +164,11 @@ public class Constants {
                 (reductionFromEncoder / magEncoderTicksPerRev) * 360.0;
         public static final double encoderVelocityToRPM = encoderTicksToUnits / 360.0 * 10 * 60;
 
-        public static final double kP = 1;
+        public static final double kP = 0.8;
         public static final double kI = 0;
         public static final double kD = 30;
 
-        public static final double kS = 1.2;
+        public static final double kS = 0.8;
         public static final double kV = 0;
         public static final double kA = 0;
 

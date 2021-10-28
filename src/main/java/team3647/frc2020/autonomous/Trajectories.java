@@ -40,6 +40,22 @@ public class Trajectories {
                         // Apply the voltage constraint
                         .addConstraint(autoVoltageConstraint).setReversed(true);
 
+        private static final TrajectoryConfig forwardTrajectoryConfigFast =
+                        new TrajectoryConfig(Constants.cDrivetrain.kMaxSpeedMetersPerSecond,
+                                Constants.cDrivetrain.fastBoiAutoAccel)
+                                        // Add kinematics to ensure max speed is actually obeyed
+                                        .setKinematics(Constants.cDrivetrain.kDriveKinematics)
+                                        // Apply the voltage constraint
+                                        .addConstraint(autoVoltageConstraint).setReversed(false);
+                
+        private static final TrajectoryConfig reverseTrajectoryConfigFast =
+                        new TrajectoryConfig(Constants.cDrivetrain.kMaxSpeedMetersPerSecond,
+                                Constants.cDrivetrain.fastBoiAutoAccel)
+                                        // Add kinematics to ensure max speed is actually obeyed
+                                        .setKinematics(Constants.cDrivetrain.kDriveKinematics)
+                                        // Apply the voltage constraint
+                                        .addConstraint(autoVoltageConstraint).setReversed(true);
+
 //SIX BALL BOTTOM (IN FRONT OF TOWER 3 SHOOT-TRENCH-SHOOT ) ////////////////////////////////////////////////////////////////////////////////////////
 public static Trajectory initiationLineToTrenchBalls = TrajectoryGenerator.generateTrajectory(
         cField.startingPositionForTrenchRun, List.of(cField.trenchBall1, cField.trenchBall2),
@@ -154,19 +170,19 @@ public static Trajectory trenchBall3ToFrontOfTower = TrajectoryGenerator.generat
                         Constants.cField.middleStart,
                         List.of(Constants.cField.tresspasingInFrontOfTarget),
                         Constants.cField.underSwithchInfrontOfTarget,
-                        forwardTrajectoryConfig);
+                        forwardTrajectoryConfigFast);
 
         public static Trajectory switchBallCollectorPath =
                 TrajectoryGenerator.generateTrajectory(
                         Constants.cField.underSwithchInfrontOfTarget,
                         List.of(),
                         Constants.cField.lastBallUnderSwitch,
-                        reverseTrajectoryConfig);
+                        reverseTrajectoryConfigFast);
 
         public static Trajectory returnFromSwitchToShootingPose = 
                 TrajectoryGenerator.generateTrajectory(
                         Constants.cField.lastBallUnderSwitch,
                         List.of(),
                         Constants.cField.underSwithchInfrontOfTarget,
-                        forwardTrajectoryConfig);
+                        forwardTrajectoryConfigFast);
 }

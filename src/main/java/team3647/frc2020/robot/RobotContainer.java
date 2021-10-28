@@ -15,9 +15,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.PerpetualCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import team3647.frc2020.autonomous.Trajectories;
 import team3647.frc2020.commands.AccelerateFlywheelKickerWheel;
 import team3647.frc2020.commands.ArcadeDrive;
@@ -334,12 +336,12 @@ public class RobotContainer {
                 m_drivetrain.init();
                 //SIX BALL BOTTOM AUTO
                 //m_drivetrain.setOdometry(Constants.cField.startingPositionForTrenchRun, new Rotation2d(0));
-                m_drivetrain.setOdometry(Constants.cField.middleStart, new Rotation2d(0));
+                //m_drivetrain.setOdometry(Constants.cField.middleStart, new Rotation2d(0));
                 //EIGHT BALL MIDDLE AUTO
                 //m_drivetrain.setOdometry(Constants.cField.centerOnInit, new Rotation2d(0));
                 //FIVE BALL TOP AUTO
+                m_drivetrain.setOdometry(Constants.cField.middleStart, new Rotation2d(0));
                 //m_drivetrain.setOdometry(Constants.cField.startingPosInfrontLoading, new Rotation2d(0));
-                m_drivetrain.setOdometry(Constants.cField.startingPosInfrontLoading, new Rotation2d(0));
                 m_flywheel.init();
                 m_indexer.init();
                 m_intake.init();
@@ -443,16 +445,18 @@ public class RobotContainer {
 
         private final Command midFive = 
                 new SequentialCommandGroup(
-                        new ParallelDeadlineGroup(startToShootingPose, new TurretMotionMagic(m_turret, 180)),
-                        new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1), 
-                        new TurretMotionMagic(m_turret, 180),
+                        new ParallelDeadlineGroup(startToShootingPose, new SequentialCommandGroup(new TurretMotionMagic(m_turret, 180), new PerpetualCommand(
+                                new TurretMotionMagic(m_turret, 180)).withInterrupt(m_visionController::isValid).withTimeout(1.5), 
+                        new ParallelCommandGroup(new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
+                        m_visionController::getFilteredYaw, m_visionController::isValid), new AccelerateFlywheelKickerWheel(m_flywheel, m_kickerWheel, 4000, true)))),
+                        new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1),
                         new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
                         m_visionController::getFilteredYaw, m_visionController::isValid).withTimeout(1), 
                         new ParallelCommandGroup(new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
                                 m_visionController::getFilteredYaw, m_visionController::isValid),
                                 new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
                                 this::getFlywheelRPM, Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
-                                IndexerSignal.GO_FAST), new GroundIntakePos(m_intake)).withTimeout(3),
+                                IndexerSignal.GO_FAST), new GroundIntakePos(m_intake)).withTimeout(2.5),
                         new StopShooting(m_flywheel, m_kickerWheel, m_indexer),
                         new ParallelDeadlineGroup(
                                 ShootingPoseToSwitchBalls,
@@ -463,11 +467,11 @@ public class RobotContainer {
                         new SequentialCommandGroup(
                                 new StowIntakeAndOrganizeFeeder(m_intake, m_indexer, m_kickerWheel)
                                         .withTimeout(2),
-                                new LoadBalls(m_indexer, m_ballStopper).withTimeout(2))),
-                        new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1), 
-                        new TurretMotionMagic(m_turret, 180),
+                                new LoadBalls(m_indexer, m_ballStopper)),
                         new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
-                        m_visionController::getFilteredYaw, m_visionController::isValid).withTimeout(1), 
+                                m_visionController::getFilteredYaw, m_visionController::isValid),
+                        new AccelerateFlywheelKickerWheel(m_flywheel, m_kickerWheel, 4000, true)),
+                        new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1), 
                         new ParallelCommandGroup(new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
                                 m_visionController::getFilteredYaw, m_visionController::isValid),
                                 new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
@@ -509,7 +513,7 @@ public class RobotContainer {
                                 
         public Command getAutonomousCommand() {
           
-                return topFive;
+                return midFive;
           
         }       
 

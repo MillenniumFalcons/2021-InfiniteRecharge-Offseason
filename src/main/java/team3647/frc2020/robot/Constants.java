@@ -3,6 +3,7 @@ package team3647.frc2020.robot;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.wpilibj.Ultrasonic.Unit;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -401,23 +402,8 @@ public class Constants {
         public static final Pose2d switchTopBall1Pose = 
                 new Pose2d(switchTopBall1, new Rotation2d(Units.degrees_to_radians(-90)));
 
-        public static final Translation2d pollSequerePoint1 = 
-                new Translation2d(Units.inches_to_meters(400), Units.inches_to_meters(180));
 
-        public static final Translation2d farTestPoint1 = 
-                new Translation2d(Units.inches_to_meters(330), Units.inches_to_meters(148));
-
-        public static final Translation2d farTestPoint2 = 
-                new Translation2d(Units.inches_to_meters(310), Units.inches_to_meters(150));
-
-        public static final Translation2d farTestPoint3 = 
-                new Translation2d(Units.inches_to_meters(300), Units.inches_to_meters(130));
-
-        public static final Translation2d farTestPoint4 = 
-                new Translation2d(Units.inches_to_meters(320), Units.inches_to_meters(110));
-
-        public static final Translation2d pollSequerePoin2 = 
-                new Translation2d(Units.inches_to_meters(400), Units.inches_to_meters(90));
+        
 
 //SIX BALL BOTTOM//////////////////////////////////////////////////////////////
         public static final Pose2d startingPositionForTrenchRun =
@@ -467,25 +453,7 @@ public class Constants {
          * the one perpendicular to the generator switch
          */
         
-//MIDDLE 5 BALLS
-        public static final Pose2d centerOnInit =
-                new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(161.625), new Rotation2d(0));
 
-        public static final Translation2d adjustmentPointBetweenSwitchInitLine  =
-                new Translation2d(Units.feet_to_meters(450), Units.feet_to_meters(150)); 
-        
-        public static final Pose2d endPositionForMiddle8Ball = 
-                new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(94.57), new Rotation2d(0));
-        // transperent
-        public static final Translation2d topToBottomTransRendevousPoint = 
-                new Translation2d(Units.inches_to_meters(336),Units.inches_to_meters(151));
-
-                
-        public static final Pose2d topToBottomTransRendevousPose = 
-        new Pose2d(Units.inches_to_meters(336),Units.inches_to_meters(151), new Rotation2d(Units.degrees_to_radians(0)));
-
-        public static final Pose2d bottom1EndPose =
-        new Pose2d(Units.inches_to_meters(480), Units.inches_to_meters(100), new Rotation2d(0));
 
 // Top Auto Points
         public static final Pose2d startingPosInfrontLoading =
@@ -494,6 +462,22 @@ public class Constants {
                 new Translation2d(Units.inches_to_meters(400), Units.inches_to_meters(200));
         public static final Pose2d bySydeToControlPanel =
                 new Pose2d(Units.inches_to_meters(392), Units.inches_to_meters(295), new Rotation2d(Units.degrees_to_radians(-90)));
+        public static final Pose2d parallelToTrenchRendezvousShotPoint = 
+                new Pose2d(Units.inches_to_meters(422.68), Units.inches_to_meters(151.4), new Rotation2d(Units.degrees_to_radians(180)));
+
+//MIDDLE 6 AUTO
+
+        public static final Pose2d middleStart = 
+                new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(127), new Rotation2d(Units.degrees_to_radians(180)));
+
+        public static final Translation2d tresspasingInFrontOfTarget = 
+                new Translation2d(Units.inches_to_meters(450), Units.inches_to_meters(60));
+
+        public static final Pose2d underSwithchInfrontOfTarget = 
+                new Pose2d(Units.inches_to_meters(320), Units.inches_to_meters(60), new Rotation2d(Units.degrees_to_radians(180)));
+
+        public static final Pose2d lastBallUnderSwitch =
+                new Pose2d(Units.inches_to_meters(380), Units.inches_to_meters(133), new Rotation2d(0.3396974 + Math.PI));
         
         
         public static final Pose2d infrontOfTargetParallelToControlPanel = 

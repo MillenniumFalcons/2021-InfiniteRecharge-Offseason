@@ -122,21 +122,30 @@ public static Trajectory trenchBall3ToFrontOfTower = TrajectoryGenerator.generat
                 TrajectoryGenerator.generateTrajectory(Constants.cField.centerOnInit,
                 List.of(
                 Constants.cField.pollSequerePoint1,
-                Constants.cField.switchTopBall2
+                Constants.cField.switchTopBall2, Constants.cField.switchTopBall1, 
+                Constants.cField.rendezvousTopToBottomTransition, Constants.cField.switchBottomBall1,
+                Constants.cField.switchBottomBall2, Constants.cField.switchBottomBall3
                 ),
-                new Pose2d(cField.switchTopBall1, new Rotation2d(0)), reverseTrajectoryConfig);
+                Constants.cField.parallelToTrenchRendezvousShotPoint, reverseTrajectoryConfig);
 
-        public static Trajectory midTrajectForward =
-                TrajectoryGenerator.generateTrajectory(new Pose2d(cField.switchTopBall1, new Rotation2d(0)),
-                List.of(cField.pollSequerePoint1),/*, Constants.cField.switchBottomBall2, Constants.cField.switchBottomBall3, Constants.cField.adjustmentPointBetweenSwitchInitLine*/
-                cField.bottom1EndPose, forwardTrajectoryConfig);
+        public static Trajectory middleStartToShootingPose = 
+                TrajectoryGenerator.generateTrajectory(
+                        Constants.cField.middleStart,
+                        List.of(Constants.cField.tresspasingInFrontOfTarget),
+                        Constants.cField.underSwithchInfrontOfTarget,
+                        forwardTrajectoryConfig);
 
-/////
-        public static Trajectory fiveBallHigh = 
-                TrajectoryGenerator.generateTrajectory(cField.startingPosInfrontOfEnemyTrench, 
-                List.of(cField.midPointToTrench),
-                 new Pose2d(cField.twoTrenchBalls, new Rotation2d(0)), reverseTrajectoryConfig);
-        //public static Trajectory trenchToShoot = 
-                //TrajectoryGenerator.generateTrajectory(, interiorWaypoints, end, config)
+        public static Trajectory switchBallCollectorPath =
+                TrajectoryGenerator.generateTrajectory(
+                        Constants.cField.underSwithchInfrontOfTarget,
+                        List.of(),
+                        Constants.cField.lastBallUnderSwitch,
+                        reverseTrajectoryConfig);
 
+        public static Trajectory returnFromSwitchToShootingPose = 
+                TrajectoryGenerator.generateTrajectory(
+                        Constants.cField.lastBallUnderSwitch,
+                        List.of(),
+                        Constants.cField.underSwithchInfrontOfTarget,
+                        forwardTrajectoryConfig);
 }

@@ -20,6 +20,7 @@ public class TurretMotionMagic extends CommandBase {
     /**
      * Creates a new TurretGoTo.
      */
+    //angle in deg
     public TurretMotionMagic(Turret turret, double angle) {
         // Use addRequirements() here to declare subsystem dependencies.
         m_turret = turret;

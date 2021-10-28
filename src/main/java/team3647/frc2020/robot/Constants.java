@@ -56,6 +56,7 @@ public class Constants {
 
         public static final double kMaxSpeedMetersPerSecond = 2;
         public static final double kMaxAccelerationMetersPerSecondSquared = 2;
+        public static final double fastBoiAutoAccel = 4;
 
         public static final double maxVoltage = 11.0;
         public static final double gearboxReduction = 9.0 / 42.0 * 24.0 / 50.0;
@@ -163,11 +164,11 @@ public class Constants {
                 (reductionFromEncoder / magEncoderTicksPerRev) * 360.0;
         public static final double encoderVelocityToRPM = encoderTicksToUnits / 360.0 * 10 * 60;
 
-        public static final double kP = 1;
+        public static final double kP = 0.8;
         public static final double kI = 0;
         public static final double kD = 30;
 
-        public static final double kS = 1.2;
+        public static final double kS = 0.8;
         public static final double kV = 0;
         public static final double kA = 0;
 
@@ -455,14 +456,28 @@ public class Constants {
         
 //MIDDLE 5 BALLS
         public static final Pose2d centerOnInit =
-                new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(161.625), new Rotation2d(0));
-        
-        public static final Translation2d pollSequerePoint1 = 
-                new Translation2d(Units.inches_to_meters(400), Units.inches_to_meters(180));
-        
-        public static final Translation2d rendezvousTopToBottomTransition = 
-                new Translation2d(Units.inches_to_meters(323), Units.inches_to_meters(133));
+        new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(161.625), new Rotation2d(0));
 
+        public static final Translation2d pollSequerePoint1 = 
+        new Translation2d(Units.inches_to_meters(400), Units.inches_to_meters(180));
+
+        public static final Translation2d rendezvousTopToBottomTransition = 
+        new Translation2d(Units.inches_to_meters(323), Units.inches_to_meters(133));
+
+
+        public static final Pose2d topToBottomTransRendevousPose = 
+        new Pose2d(Units.inches_to_meters(336),Units.inches_to_meters(151), new Rotation2d(Units.degrees_to_radians(0)));
+
+        public static final Pose2d bottom1EndPose =
+        new Pose2d(Units.inches_to_meters(480), Units.inches_to_meters(100), new Rotation2d(0));
+
+// Top Auto Points
+        public static final Pose2d startingPosInfrontLoading =
+                new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(230), new Rotation2d(0));
+        public static final Translation2d topFirstTranslation1 =
+                new Translation2d(Units.inches_to_meters(400), Units.inches_to_meters(200));
+        public static final Pose2d bySydeToControlPanel =
+                new Pose2d(Units.inches_to_meters(392), Units.inches_to_meters(295), new Rotation2d(Units.degrees_to_radians(-90)));
         public static final Pose2d parallelToTrenchRendezvousShotPoint = 
                 new Pose2d(Units.inches_to_meters(422.68), Units.inches_to_meters(151.4), new Rotation2d(Units.degrees_to_radians(180)));
 
@@ -480,7 +495,15 @@ public class Constants {
         public static final Pose2d lastBallUnderSwitch =
                 new Pose2d(Units.inches_to_meters(380), Units.inches_to_meters(133), new Rotation2d(0.3396974 + Math.PI));
         
-                
+        
+        public static final Pose2d infrontOfTargetParallelToControlPanel = 
+                new Pose2d(Units.inches_to_meters(450), Units.inches_to_meters(100), new Rotation2d(Units.degrees_to_radians(-90)));
+
+//Straight Auto Points
+        public static final Pose2d startingPoseInfrontOfPoleOnInit = 
+                new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(126.879), new Rotation2d(0));
+        public static final Pose2d endingPoseBumpersTouchWall = 
+                new Pose2d(Units.inches_to_meters(605), Units.inches_to_meters(126.879), new Rotation2d(0));
     }
 
     public static class cClimber {

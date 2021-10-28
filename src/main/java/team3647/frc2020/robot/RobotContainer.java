@@ -15,9 +15,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.PerpetualCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import team3647.frc2020.autonomous.Trajectories;
 import team3647.frc2020.commands.AccelerateFlywheelKickerWheel;
 import team3647.frc2020.commands.ArcadeDrive;
@@ -333,9 +335,13 @@ public class RobotContainer {
         public void init() {
                 m_drivetrain.init();
                 //SIX BALL BOTTOM AUTO
-                m_drivetrain.setOdometry(Constants.cField.middleStart, new Rotation2d(0));
+                //m_drivetrain.setOdometry(Constants.cField.startingPositionForTrenchRun, new Rotation2d(0));
+                //m_drivetrain.setOdometry(Constants.cField.middleStart, new Rotation2d(0));
                 //EIGHT BALL MIDDLE AUTO
                 //m_drivetrain.setOdometry(Constants.cField.centerOnInit, new Rotation2d(0));
+                //FIVE BALL TOP AUTO
+                m_drivetrain.setOdometry(Constants.cField.middleStart, new Rotation2d(0));
+                //m_drivetrain.setOdometry(Constants.cField.startingPosInfrontLoading, new Rotation2d(0));
                 m_flywheel.init();
                 m_indexer.init();
                 m_intake.init();
@@ -345,6 +351,8 @@ public class RobotContainer {
                 m_visionController.setLedMode(LEDMode.ON);
                 m_visionController.setPipeline(Pipeline.OUTSIDE_CLOUDY);
                 m_turret.setAngle(0);
+                m_intake.retractInner();
+                m_intake.retractOuter();
         }
 
         public void onDisabled() {
@@ -368,6 +376,25 @@ public class RobotContainer {
         private final RamseteCommand initiationLineToRendezvousBalls = new RamseteCommand(
                 Trajectories.bumpersInFrontOfTowerToRendezvousBalls, m_drivetrain::getPose, new RamseteController(), 
                 Constants.cDrivetrain.kDriveKinematics, m_drivetrain::setVelocityMpS, m_drivetrain);
+//FIVE BALL TOP
+        private final RamseteCommand initiationLoadingToContolPanel = new RamseteCommand(
+                Trajectories.topStartToContorlPannelBalls, m_drivetrain::getPose, new RamseteController(),
+                Constants.cDrivetrain.kDriveKinematics, m_drivetrain::setVelocityMpS, m_drivetrain);
+        private final RamseteCommand controlPanelToTarget = new RamseteCommand(Trajectories.controlPanelBallsToTarget,
+        m_drivetrain::getPose, new RamseteController(), Constants.cDrivetrain.kDriveKinematics, m_drivetrain::setVelocityMpS, m_drivetrain);
+
+//straigh three in front of pole 
+        private final RamseteCommand poleToWall = new RamseteCommand(Trajectories.straightToTarget,m_drivetrain::getPose, new RamseteController(),
+        Constants.cDrivetrain.kDriveKinematics, m_drivetrain::setVelocityMpS, m_drivetrain);
+
+
+
+
+
+
+
+
+
 
 //EIGHT BALL MIDDLE (MIDDLE 3 SHOOT-RENDEZVOUS TOP- RENDEVOUS BOTTOM- SHOOT) //////////////////////////////////////////////////////////////////////////////////////////////////
         private final RamseteCommand midFiveBack = 
@@ -375,8 +402,9 @@ public class RobotContainer {
                         Constants.cDrivetrain.kDriveKinematics, m_drivetrain::setVelocityMpS, m_drivetrain);
         
 
+//SIX BALL BOTTOM (SHOOT 3 GRAB 3 IN TRENCH SHOOT)
         private final Command sixBallBottom =  new SequentialCommandGroup(
-                new TurretMotionMagic(m_turret, 30).withTimeout(.4),
+                new TurretMotionMagic(m_turret, 35).withTimeout(.5),
                 new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
                         m_visionController::getFilteredYaw, m_visionController::isValid)
                                 .withTimeout(.3),
@@ -417,16 +445,18 @@ public class RobotContainer {
 
         private final Command midFive = 
                 new SequentialCommandGroup(
-                        new ParallelDeadlineGroup(startToShootingPose, new TurretMotionMagic(m_turret, 180)),
-                        new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1), 
-                        new TurretMotionMagic(m_turret, 180),
+                        new ParallelDeadlineGroup(startToShootingPose, new SequentialCommandGroup(new TurretMotionMagic(m_turret, 180), new PerpetualCommand(
+                                new TurretMotionMagic(m_turret, 180)).withInterrupt(m_visionController::isValid).withTimeout(1.5), 
+                        new ParallelCommandGroup(new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
+                        m_visionController::getFilteredYaw, m_visionController::isValid), new AccelerateFlywheelKickerWheel(m_flywheel, m_kickerWheel, 4000, true)))),
+                        new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1),
                         new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
                         m_visionController::getFilteredYaw, m_visionController::isValid).withTimeout(1), 
                         new ParallelCommandGroup(new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
                                 m_visionController::getFilteredYaw, m_visionController::isValid),
                                 new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
                                 this::getFlywheelRPM, Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
-                                IndexerSignal.GO_FAST), new GroundIntakePos(m_intake)).withTimeout(3),
+                                IndexerSignal.GO_FAST), new GroundIntakePos(m_intake)).withTimeout(2.5),
                         new StopShooting(m_flywheel, m_kickerWheel, m_indexer),
                         new ParallelDeadlineGroup(
                                 ShootingPoseToSwitchBalls,
@@ -437,11 +467,11 @@ public class RobotContainer {
                         new SequentialCommandGroup(
                                 new StowIntakeAndOrganizeFeeder(m_intake, m_indexer, m_kickerWheel)
                                         .withTimeout(2),
-                                new LoadBalls(m_indexer, m_ballStopper).withTimeout(2))),
-                        new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1), 
-                        new TurretMotionMagic(m_turret, 180),
+                                new LoadBalls(m_indexer, m_ballStopper)),
                         new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
-                        m_visionController::getFilteredYaw, m_visionController::isValid).withTimeout(1), 
+                                m_visionController::getFilteredYaw, m_visionController::isValid),
+                        new AccelerateFlywheelKickerWheel(m_flywheel, m_kickerWheel, 4000, true)),
+                        new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1), 
                         new ParallelCommandGroup(new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
                                 m_visionController::getFilteredYaw, m_visionController::isValid),
                                 new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
@@ -450,15 +480,41 @@ public class RobotContainer {
                         new StopShooting(m_flywheel, m_kickerWheel, m_indexer)
                         );
         
-        // private final Command testPath = new SequentialCommandGroup(
-        //         middle8BallsPath,  
-        //         new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1));
-                
+
+        //TOP FIVE
+        private final Command topFive = new SequentialCommandGroup(
+                new ParallelDeadlineGroup(initiationLoadingToContolPanel, new GroundIntakeSequence(m_intake, m_indexer, m_ballStopper)),
+                        new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1),
+                                new ParallelDeadlineGroup(
+                                        controlPanelToTarget,
+                                        new SequentialCommandGroup(
+                                                new StowIntakeAndOrganizeFeeder(m_intake, m_indexer, m_kickerWheel)
+                                                        .withTimeout(2),
+                                                new LoadBalls(m_indexer, m_ballStopper))),
+                        new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1),
+                        new TurretMotionMagic(m_turret, 90),
+                        new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
+                                m_visionController::getFilteredYaw, m_visionController::isValid).withTimeout(1),
+                new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
+                        this::getFlywheelRPM, Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
+                        IndexerSignal.GO_FAST).withTimeout(4),
+                new StopShooting(m_flywheel, m_kickerWheel, m_indexer));
+
+//in front of pole to wall straight 3 ball
+        private final Command topStraight = new SequentialCommandGroup(new TurretMotionMagic(m_turret, -10).withTimeout(.4),
+        new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
+                m_visionController::getFilteredYaw, m_visionController::isValid)
+                        .withTimeout(.3), new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
+                this::getFlywheelRPM, Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
+                IndexerSignal.GO_FAST).withTimeout(3),
+        new StopShooting(m_flywheel, m_kickerWheel, m_indexer), poleToWall, new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1));
+        
         
                                 
         public Command getAutonomousCommand() {
-
+          
                 return midFive;
+          
         }       
 
         public void stopDrivetrain() {

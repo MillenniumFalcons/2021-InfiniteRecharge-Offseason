@@ -40,6 +40,22 @@ public class Trajectories {
                         // Apply the voltage constraint
                         .addConstraint(autoVoltageConstraint).setReversed(true);
 
+        private static final TrajectoryConfig forwardTrajectoryConfigFast =
+                        new TrajectoryConfig(Constants.cDrivetrain.kMaxSpeedMetersPerSecond,
+                                Constants.cDrivetrain.fastBoiAutoAccel)
+                                        // Add kinematics to ensure max speed is actually obeyed
+                                        .setKinematics(Constants.cDrivetrain.kDriveKinematics)
+                                        // Apply the voltage constraint
+                                        .addConstraint(autoVoltageConstraint).setReversed(false);
+                
+        private static final TrajectoryConfig reverseTrajectoryConfigFast =
+                        new TrajectoryConfig(Constants.cDrivetrain.kMaxSpeedMetersPerSecond,
+                                Constants.cDrivetrain.fastBoiAutoAccel)
+                                        // Add kinematics to ensure max speed is actually obeyed
+                                        .setKinematics(Constants.cDrivetrain.kDriveKinematics)
+                                        // Apply the voltage constraint
+                                        .addConstraint(autoVoltageConstraint).setReversed(true);
+
 //SIX BALL BOTTOM (IN FRONT OF TOWER 3 SHOOT-TRENCH-SHOOT ) ////////////////////////////////////////////////////////////////////////////////////////
 public static Trajectory initiationLineToTrenchBalls = TrajectoryGenerator.generateTrajectory(
         cField.startingPositionForTrenchRun, List.of(cField.trenchBall1, cField.trenchBall2),
@@ -122,21 +138,51 @@ public static Trajectory trenchBall3ToFrontOfTower = TrajectoryGenerator.generat
                 TrajectoryGenerator.generateTrajectory(Constants.cField.centerOnInit,
                 List.of(
                 Constants.cField.pollSequerePoint1,
-                Constants.cField.switchTopBall2
-                ),
-                new Pose2d(cField.switchTopBall1, new Rotation2d(0)), reverseTrajectoryConfig);
+                Constants.cField.switchTopBall2, Constants.cField.switchTopBall1, 
+                Constants.cField.rendezvousTopToBottomTransition, Constants.cField.switchBottomBall1,
+                Constants.cField.switchBottomBall2, Constants.cField.switchBottomBall3
+                ), new Pose2d(cField.switchTopBall1, new Rotation2d(0)), reverseTrajectoryConfig);
 
         public static Trajectory midTrajectForward =
                 TrajectoryGenerator.generateTrajectory(new Pose2d(cField.switchTopBall1, new Rotation2d(0)),
                 List.of(cField.pollSequerePoint1),/*, Constants.cField.switchBottomBall2, Constants.cField.switchBottomBall3, Constants.cField.adjustmentPointBetweenSwitchInitLine*/
                 cField.bottom1EndPose, forwardTrajectoryConfig);
 
-/////
-        public static Trajectory fiveBallHigh = 
-                TrajectoryGenerator.generateTrajectory(cField.startingPosInfrontOfEnemyTrench, 
-                List.of(cField.midPointToTrench),
-                 new Pose2d(cField.twoTrenchBalls, new Rotation2d(0)), reverseTrajectoryConfig);
-        //public static Trajectory trenchToShoot = 
-                //TrajectoryGenerator.generateTrajectory(, interiorWaypoints, end, config)
+        public static Trajectory topStartToContorlPannelBalls =
+                TrajectoryGenerator.generateTrajectory(
+                        Constants.cField.startingPosInfrontLoading,
+                        List.of(Constants.cField.topFirstTranslation1),
+                        Constants.cField.bySydeToControlPanel,
+                        reverseTrajectoryConfig);
 
+        public static Trajectory controlPanelBallsToTarget = 
+                TrajectoryGenerator.generateTrajectory(
+                        Constants.cField.bySydeToControlPanel, List.of(),
+                        Constants.cField.infrontOfTargetParallelToControlPanel, forwardTrajectoryConfig);
+
+        //straight auto
+        public static Trajectory straightToTarget = 
+                TrajectoryGenerator.generateTrajectory(
+                        Constants.cField.startingPoseInfrontOfPoleOnInit, List.of(), Constants.cField.endingPoseBumpersTouchWall, forwardTrajectoryConfig);
+
+        public static Trajectory middleStartToShootingPose = 
+                TrajectoryGenerator.generateTrajectory(
+                        Constants.cField.middleStart,
+                        List.of(Constants.cField.tresspasingInFrontOfTarget),
+                        Constants.cField.underSwithchInfrontOfTarget,
+                        forwardTrajectoryConfigFast);
+
+        public static Trajectory switchBallCollectorPath =
+                TrajectoryGenerator.generateTrajectory(
+                        Constants.cField.underSwithchInfrontOfTarget,
+                        List.of(),
+                        Constants.cField.lastBallUnderSwitch,
+                        reverseTrajectoryConfigFast);
+
+        public static Trajectory returnFromSwitchToShootingPose = 
+                TrajectoryGenerator.generateTrajectory(
+                        Constants.cField.lastBallUnderSwitch,
+                        List.of(),
+                        Constants.cField.underSwithchInfrontOfTarget,
+                        forwardTrajectoryConfigFast);
 }

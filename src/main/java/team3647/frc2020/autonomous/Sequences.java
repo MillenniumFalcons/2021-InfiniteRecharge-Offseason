@@ -11,6 +11,6 @@ package team3647.frc2020.autonomous;
  * Add your docs here.
  */
 public class Sequences {
-
+    
     
 }

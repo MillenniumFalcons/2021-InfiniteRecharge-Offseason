@@ -8,6 +8,7 @@
 package team3647.frc2020.robot;
 
 import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -74,8 +75,22 @@ import team3647.lib.wpi.PDP;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-
+        
+        public enum Auto {
+                LOW_SIX(0),
+                MID_THREE(1),
+                MID_SIX(2),
+                TOP_FIVE(3);
+                int index;
+                Auto(int index) {
+                        this.index = index;
+                }
+        }
+        private final Pose2d startPos;
+        private final Auto runningAuto = Auto.MID_THREE;
+        private final Command autoSequenceToRun;
         private final Joysticks mainController = new Joysticks(0);
+        
         private final Joysticks coController = new Joysticks(1);
         private final PDP pdp = new PDP();
         private final Compressor airCompressor = new Compressor(0);
@@ -104,7 +119,7 @@ public class RobotContainer {
         private final KickerWheel m_kickerWheel = new KickerWheel(Constants.cKickerWheel.masterConfig,
                         Constants.cKickerWheel.pidConfig);
 
-        private final Turret m_turret = new Turret(Constants.cTurret.masterConfig, Constants.cTurret.pidConfig,
+                        private final Turret m_turret = new Turret(Constants.cTurret.masterConfig, Constants.cTurret.pidConfig,
                         Constants.cTurret.kMaxRotationDeg, Constants.cTurret.kMinRotationDeg,
                         Constants.cTurret.limitSwitchPin);
 
@@ -141,40 +156,29 @@ public class RobotContainer {
                 m_commandScheduler.setDefaultCommand(m_turret, new TurretManual(m_turret, coController::getLeftStickX));
                 m_indexer.setDefaultCommand(new IndexerManual(m_indexer, coController::getRightStickY));
 
-                m_LED.setDefaultCommand(new RunCommand(() -> {
-                        boolean hasValidTarget = m_visionController.isValid();
-                        boolean isAimed = hasValidTarget && Math.abs(m_visionController.getFilteredYaw()) < 1;
-                        double targetAngleInForTurretPosition = m_turret.getAngle()
-                                        - m_visionController.getFilteredYaw();
-                        boolean isTargetOutsideLimits = hasValidTarget
-                                        && !m_turret.isAngleGood(targetAngleInForTurretPosition);
-                        boolean isTurretAiming = m_turret.isAiming();
-
-                        if (isTurretAiming) {
-                                if (isTargetOutsideLimits) {
-                                        if (m_LED.getRed() > .8) {
-                                                m_LED.set(0, 0, 0);
-                                        } else {
-                                                m_LED.set(1, 0, 0);
-                                        }
-                                } else if (hasValidTarget) {
-                                        if (isAimed) {
-                                                if (m_LED.getGreen() > .8) {
-                                                        m_LED.set(0, 0, 0);
-                                                } else {
-                                                        m_LED.set(0, 1, 0);
-                                                }
-                                        } else {
-                                                m_LED.set(0, 1, 0);
-                                        }
-                                } else {
-                                        m_LED.set(1, 1, 0);
-                                }
-                        } else {
-                                m_LED.set(1, 0, 0);
-                        }
-                }, m_LED));
-
+                switch (runningAuto) {
+                        case LOW_SIX:
+                        startPos = Constants.cField.startingPositionForTrenchRun;
+                        autoSequenceToRun = sixBallBottom;
+                        break;
+                        case  MID_SIX:
+                        autoSequenceToRun = midFive;
+                        startPos = Constants.cField.middleStart;
+                        break;
+                        case MID_THREE:
+                        startPos = Constants.cField.startingPoseInfrontOfPoleOnInit;
+                        autoSequenceToRun = topStraight;
+                        break;
+                        case TOP_FIVE:
+                        startPos = Constants.cField.startingPosInfrontLoading;
+                        autoSequenceToRun = topFive;
+                        break;
+                        default:
+                        startPos = Constants.cField.startingPositionForTrenchRun;
+                        autoSequenceToRun = sixBallBottom;
+                }
+                System.out.println(Units.metersToInches( startPos.getY()));
+ 
                 m_printer.addDouble("tunnel amps", () -> {
                         return pdp.getCurrent(m_indexer.getTunnelPDPSlot());
                 });
@@ -194,6 +198,10 @@ public class RobotContainer {
                 
                 m_printer.addDouble("dt velocity", m_drivetrain::getLeftVelocity);
                 m_printer.addDouble("dt velocity", m_drivetrain::getRightVelocity);
+                m_printer.addDouble("AUTO", () -> {
+                        return runningAuto.index;
+                });
+                
                 configButtonBindings();
         }
 
@@ -264,7 +272,7 @@ public class RobotContainer {
                 // coController.rightBumper.whenActive(new RunCommand(m_ballStopper::extend, m_ballStopper));
 
                 coController.leftMidButton.whenActive(new InstantCommand(() -> {
-                        m_visionController.setPipeline(Pipeline.SUNNY_TARGETING);
+                        m_visionController.setPipeline(Pipeline.OUTSIDE_CLOUDY);
                 }));
 
                 // coController.rightMidButton.whenActive(new InstantCommand(() -> {
@@ -333,15 +341,8 @@ public class RobotContainer {
         }
 
         public void init() {
-                m_drivetrain.init();
-                //SIX BALL BOTTOM AUTO
-                //m_drivetrain.setOdometry(Constants.cField.startingPositionForTrenchRun, new Rotation2d(0));
-                //m_drivetrain.setOdometry(Constants.cField.middleStart, new Rotation2d(0));
-                //EIGHT BALL MIDDLE AUTO
-                //m_drivetrain.setOdometry(Constants.cField.centerOnInit, new Rotation2d(0));
-                //FIVE BALL TOP AUTO
-                m_drivetrain.setOdometry(Constants.cField.middleStart, new Rotation2d(0));
-                //m_drivetrain.setOdometry(Constants.cField.startingPosInfrontLoading, new Rotation2d(0));
+                m_drivetrain.init();               
+                m_drivetrain.setOdometry(startPos, new Rotation2d(0));
                 m_flywheel.init();
                 m_indexer.init();
                 m_intake.init();
@@ -415,7 +416,7 @@ public class RobotContainer {
                 m_visionController::getFilteredYaw, m_visionController::isValid)).withTimeout(3), new StopShooting(m_flywheel, m_kickerWheel, m_indexer),
                 new ParallelDeadlineGroup(initiationLineToTrench,
                         new GroundIntakeSequence(m_intake, m_indexer, m_ballStopper)),
-                new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1),
+                new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1), 
                 new ParallelDeadlineGroup(
                         trenchToCenterTower,
                         new SequentialCommandGroup(
@@ -515,10 +516,9 @@ public class RobotContainer {
                                 
         public Command getAutonomousCommand() {
           
-                return midFive;
+                return autoSequenceToRun;
           
-        }       
-
+        }
         public void stopDrivetrain() {
                 m_drivetrain.setOpenLoop(DriveSignal.BRAKE);
         }

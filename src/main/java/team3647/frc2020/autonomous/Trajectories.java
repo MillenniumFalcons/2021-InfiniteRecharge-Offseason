@@ -148,18 +148,21 @@ public static Trajectory trenchBall3ToFrontOfTower = TrajectoryGenerator.generat
                 List.of(cField.pollSequerePoint1),/*, Constants.cField.switchBottomBall2, Constants.cField.switchBottomBall3, Constants.cField.adjustmentPointBetweenSwitchInitLine*/
                 cField.bottom1EndPose, forwardTrajectoryConfig);
 
+//TOP BALLS
         public static Trajectory topStartToContorlPannelBalls =
                 TrajectoryGenerator.generateTrajectory(
-                        Constants.cField.startingPosInfrontLoading,
-                        List.of(Constants.cField.topFirstTranslation1),
-                        Constants.cField.bySydeToControlPanel,
+                        Constants.cField.startingPosParallelToTrenchEdge,
+                        List.of(),
+                        Constants.cField.trenchPickUpPose,
                         reverseTrajectoryConfig);
 
-        public static Trajectory controlPanelBallsToTarget = 
+        public static Trajectory controlPanelToTower = 
                 TrajectoryGenerator.generateTrajectory(
-                        Constants.cField.bySydeToControlPanel, List.of(),
-                        Constants.cField.infrontOfTargetParallelToControlPanel, forwardTrajectoryConfig);
-
+                        Constants.cField.trenchPickUpPose,
+                        List.of(Constants.cField.intermidPoseToTower),
+                        Constants.cField.finalPose,
+                        forwardTrajectoryConfig);
+///////////////
         //straight auto
         public static Trajectory straightToTarget = 
                 TrajectoryGenerator.generateTrajectory(
@@ -184,5 +187,5 @@ public static Trajectory trenchBall3ToFrontOfTower = TrajectoryGenerator.generat
                         Constants.cField.lastBallUnderSwitch,
                         List.of(),
                         Constants.cField.underSwithchInfrontOfTarget,
-                        forwardTrajectoryConfigFast);
+                        reverseTrajectoryConfigFast);
 }

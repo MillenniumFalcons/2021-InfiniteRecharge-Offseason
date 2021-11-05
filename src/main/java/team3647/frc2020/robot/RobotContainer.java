@@ -87,7 +87,7 @@ public class RobotContainer {
                 }
         }
         private final Pose2d startPos;
-        private final Auto runningAuto = Auto.MID_THREE;
+        private final Auto runningAuto = Auto.TOP_FIVE;
         private final Command autoSequenceToRun;
         private final Joysticks mainController = new Joysticks(0);
         
@@ -170,7 +170,7 @@ public class RobotContainer {
                         autoSequenceToRun = topStraight;
                         break;
                         case TOP_FIVE:
-                        startPos = Constants.cField.startingPosInfrontLoading;
+                        startPos = Constants.cField.startingPosParallelToTrenchEdge;
                         autoSequenceToRun = topFive;
                         break;
                         default:
@@ -381,7 +381,8 @@ public class RobotContainer {
         private final RamseteCommand initiationLoadingToContolPanel = new RamseteCommand(
                 Trajectories.topStartToContorlPannelBalls, m_drivetrain::getPose, new RamseteController(),
                 Constants.cDrivetrain.kDriveKinematics, m_drivetrain::setVelocityMpS, m_drivetrain);
-        private final RamseteCommand controlPanelToTarget = new RamseteCommand(Trajectories.controlPanelBallsToTarget,
+
+        private final RamseteCommand controlPanelToTarget = new RamseteCommand(Trajectories.controlPanelToTower,
         m_drivetrain::getPose, new RamseteController(), Constants.cDrivetrain.kDriveKinematics, m_drivetrain::setVelocityMpS, m_drivetrain);
 
 //straigh three in front of pole 
@@ -495,13 +496,14 @@ public class RobotContainer {
                                                         .withTimeout(2),
                                                 new LoadBalls(m_indexer, m_ballStopper))),
                         new RunCommand(this::stopDrivetrain, m_drivetrain).withTimeout(.1),
-                        new TurretMotionMagic(m_turret, 90),
+                        new TurretMotionMagic(m_turret, 69),
                         new AutoAimTurretHood(m_hood, m_turret, this::getHoodPosition,
                                 m_visionController::getFilteredYaw, m_visionController::isValid).withTimeout(1),
                 new ShootClosedLoop(m_flywheel, m_kickerWheel, m_indexer, m_ballStopper,
                         this::getFlywheelRPM, Constants.cKickerWheel::getFlywheelOutputFromFlywheelRPM,
                         IndexerSignal.GO_FAST).withTimeout(4),
-                new StopShooting(m_flywheel, m_kickerWheel, m_indexer));
+                new StopShooting(m_flywheel, m_kickerWheel, m_indexer)
+        );
 
 //in front of pole to wall straight 3 ball
         private final Command topStraight = new SequentialCommandGroup(new TurretMotionMagic(m_turret, -10).withTimeout(.4),

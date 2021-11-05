@@ -472,15 +472,24 @@ public class Constants {
         new Pose2d(Units.inches_to_meters(480), Units.inches_to_meters(100), new Rotation2d(0));
 
 // Top Auto Points
-        public static final Pose2d startingPosInfrontLoading =
-                new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(230), new Rotation2d(0));
-        public static final Translation2d topFirstTranslation1 =
-                new Translation2d(Units.inches_to_meters(400), Units.inches_to_meters(200));
-        public static final Pose2d bySydeToControlPanel =
-                new Pose2d(Units.inches_to_meters(392), Units.inches_to_meters(295), new Rotation2d(Units.degrees_to_radians(-90)));
-        public static final Pose2d parallelToTrenchRendezvousShotPoint = 
-                new Pose2d(Units.inches_to_meters(422.68), Units.inches_to_meters(151.4), new Rotation2d(Units.degrees_to_radians(180)));
-
+        public static final Pose2d secondTopStart =
+                new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(286.09), new Rotation2d(0));
+        public static final Pose2d trenchPickUpPose =
+                new Pose2d(10.32, 7.30, new Rotation2d(Units.degrees_to_radians(-28.65)));
+        public static final Pose2d startingPosParallelToTrenchEdge =
+                new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(267.75), new Rotation2d(0));
+        //check rotation 
+        public static final Pose2d endTrenchBall2 = 
+                new Pose2d(Units.inches_to_meters(378.89), Units.inches_to_meters(286.09), new Rotation2d(Units.degrees_to_radians(90)));
+        //temp point
+        public static final Translation2d intermidPoseToTower = 
+                new Translation2d(Units.inches_to_meters(500), Units.inches_to_meters(200));
+        public static final Translation2d trenchCorner = 
+                new Translation2d(Units.inches_to_meters(422.68), Units.inches_to_meters(267.75));
+        public static final Pose2d finalPose = 
+                new Pose2d(Units.inches_to_meters(509.25), Units.inches_to_meters(130), new Rotation2d(Units.degrees_to_radians(-90)));
+        
+        
 //MIDDLE 6 AUTO
 
         public static final Pose2d middleStart = 

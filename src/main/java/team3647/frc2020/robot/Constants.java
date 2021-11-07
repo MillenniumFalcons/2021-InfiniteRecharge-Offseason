@@ -147,7 +147,7 @@ public class Constants {
         public static final boolean sensorInverted = false;
 
         public static final double kMinRotationDeg = -20;
-        public static final double kMaxRotationDeg = 200;
+        public static final double kMaxRotationDeg = 135;
 
         public static final double kCruiseVelocityRPM = 150;
         public static final double kAccelerationRPMs = 300;
@@ -173,7 +173,7 @@ public class Constants {
         public static final double kA = 0;
 
         public static final double forwardDeg = 0;
-        public static final double backwardDeg = 180;
+        public static final double backwardDeg = 135;
         public static final double leftDeg = 90;
         public static final double rightDeg = -90;
 

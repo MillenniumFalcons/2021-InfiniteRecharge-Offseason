@@ -7,6 +7,7 @@
 
 package team3647.frc2020.commands;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import team3647.frc2020.subsystems.Hood;
@@ -14,18 +15,23 @@ import team3647.frc2020.subsystems.Hood;
 public class MoveHood extends CommandBase {
     private final Hood m_hood;
     private final DoubleSupplier hoodPosition;
+    private final BooleanSupplier validTarget;
 
     /**
      * Creates a new MoveHood.
      */
-    public MoveHood(Hood hood, DoubleSupplier hoodPosition) {
+    public MoveHood(Hood hood, DoubleSupplier hoodPosition, BooleanSupplier validTarget) {
         // Use addRequirements() here to declare subsystem dependencies.
         m_hood = hood;
+        this.validTarget = validTarget;
         this.hoodPosition = hoodPosition;
         addRequirements(m_hood);
     }
 
     public MoveHood(Hood hood, double hoodPosition) {
+        this.validTarget = () -> {
+            return true;
+        };
         m_hood = hood;
         this.hoodPosition = () -> {
             return hoodPosition;
@@ -40,7 +46,11 @@ public class MoveHood extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_hood.setPosition(hoodPosition.getAsDouble());
+        if(validTarget.getAsBoolean()) {
+            m_hood.setPosition(hoodPosition.getAsDouble());
+        } else {
+            m_hood.setPosition(m_hood.getAppliedPosition());
+        }
     }
 
     // Called once the command ends or is interrupted.

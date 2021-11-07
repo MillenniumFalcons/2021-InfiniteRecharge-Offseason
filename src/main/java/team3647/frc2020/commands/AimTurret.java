@@ -40,6 +40,8 @@ public class AimTurret extends CommandBase {
     public void execute() {
         if(hasValidTarget.getAsBoolean()) {
             turretPositionToGoTo = m_turret.getAngle() - m_angleToTarget.getAsDouble();
+        } else {
+            turretPositionToGoTo = 0;
         }
         m_turret.setAngle(turretPositionToGoTo);
     }

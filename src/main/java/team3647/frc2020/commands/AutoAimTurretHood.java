@@ -22,7 +22,7 @@ public class AutoAimTurretHood extends ParallelCommandGroup {
      */
     public AutoAimTurretHood(Hood hood, Turret turret, DoubleSupplier hoodPosition,
             DoubleSupplier angleToTurret, BooleanSupplier hasValidTarget) {
-        super(new AimTurret(turret, angleToTurret, hasValidTarget), new MoveHood(hood, hoodPosition));
+        super(new AimTurret(turret, angleToTurret, hasValidTarget), new MoveHood(hood, hoodPosition, hasValidTarget));
         // Add your commands in the super() call, e.g.
         // super(new FooCommand(), new BarCommand());super();
     }

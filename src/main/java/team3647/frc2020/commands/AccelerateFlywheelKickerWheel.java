@@ -60,6 +60,11 @@ public class AccelerateFlywheelKickerWheel extends CommandBase {
         if (hasValidTarget.getAsBoolean()) {
             m_flywheel.setRPM(flywheelRPM.getAsDouble());
             m_kickerWheel.setOpenloop(.5);
+            System.out.println("Running shooter");
+        } else {
+            System.out.println("Stopping shooter");
+            m_flywheel.setOpenloop(0);
+            m_kickerWheel.setOpenloop(0);
         }
     }
 
@@ -71,6 +76,7 @@ public class AccelerateFlywheelKickerWheel extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return m_flywheel.reachedTargetVelocity();
+        // return m_flywheel.reachedTargetVelocity();
+        return false;
     }
 }

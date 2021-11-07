@@ -184,7 +184,7 @@ public class Constants {
 
         public static final ClosedLoopConfig pidConfig = new ClosedLoopConfig()
                 .encoderTicksToUnits(encoderTicksToUnits).encoderVelocityToRPM(encoderVelocityToRPM)
-                .encoderAccelerationToUnits(encoderVelocityToRPM).positionThreshold(.5)
+                .encoderAccelerationToUnits(encoderVelocityToRPM).positionThreshold(1.5)
                 .maxVelocity(50).maxAcceleration(kAccelerationRPMs).sensorInverted(sensorInverted)
                 .configPID(kP, kI, kD).configFeedForward(kS, kV, kA);
     }
@@ -254,7 +254,7 @@ public class Constants {
 
         public static double getFlywheelOutputFromFlywheelRPM(double rpm) {
             // return MathUtil.clamp(rpm / 2 * 0.000111111, .5, 1);
-            return .9;
+            return .4;
         }
     }
 

@@ -251,7 +251,7 @@ public class RobotContainer {
 
                 // climber deploy and get turret out of way
                 mainController.buttonX.whenActive(new SequentialCommandGroup(
-                                new TurretMotionMagic(m_turret, 180),
+                                new TurretMotionMagic(m_turret, Constants.cTurret.backwardDeg),
                                 new DeployClimber(m_climber),
                                 new TurretMotionMagic(m_turret, Constants.cTurret.backwardDeg).keepPosition()));
 
